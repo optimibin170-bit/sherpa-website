@@ -27,7 +27,7 @@ const ResourceDetail = () => {
             <BookOpen className="h-9 w-9" />
           </div>
           <p className="mb-3 font-display text-sm font-bold uppercase text-ridge">{resource.type}</p>
-          <h1 className="text-4xl font-bold leading-tight text-summit sm:text-6xl">{resource.title}</h1>
+          <h1 className="text-3xl font-bold leading-tight text-summit sm:text-4xl md:text-5xl lg:text-6xl">{resource.title}</h1>
           <p className="mt-6 text-lg font-semibold leading-8 text-ink-soft">{resource.summary}</p>
         </div>
 

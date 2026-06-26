@@ -1,13 +1,14 @@
 import {
   ArrowRight, ArrowUpRight, ChevronDown, ChevronLeft, ChevronRight, Mail, MapPin, Search,
   Building2, Laptop, Briefcase, ShoppingCart, HeartPulse, Zap,
-  Clock, Users, Globe,
+  Clock, Users, Globe, Menu, X,
 } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { z } from "zod";
 import ssaLogo from "@/assets/ssa-logo.jpg";
 import { resources, services, testimonials } from "@/data/ssa";
+import { Sheet, SheetContent, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import {
   TopographyPattern,
   GridPattern,
@@ -183,13 +184,58 @@ const Index = () => {
           </div>
           <div className="flex items-center gap-4">
             <button aria-label="Search" className="hidden rounded-full border border-primary/20 p-2.5 text-summit transition-all duration-300 hover:bg-primary/8 hover:border-primary/30 hover:shadow-sm sm:inline-flex"><Search className="h-4 w-4" /></button>
-            <a href="#contact" className="inline-flex items-center gap-2 rounded-sm gradient-cta px-6 py-2.5 text-[13px] font-semibold uppercase tracking-wider text-primary-foreground transition-all duration-300 hover:shadow-lg hover:shadow-primary/20">Start a project <ArrowRight className="h-3.5 w-3.5" /></a>
+            <a href="#contact" className="hidden sm:inline-flex items-center gap-2 rounded-sm gradient-cta px-6 py-2.5 text-[13px] font-semibold uppercase tracking-wider text-primary-foreground transition-all duration-300 hover:shadow-lg hover:shadow-primary/20">Start a project <ArrowRight className="h-3.5 w-3.5" /></a>
+            {/* Mobile hamburger */}
+            <Sheet>
+              <SheetTrigger asChild>
+                <button aria-label="Open menu" className="inline-flex lg:hidden items-center justify-center rounded-md border border-primary/20 p-2.5 text-summit transition-all duration-300 hover:bg-primary/8">
+                  <Menu className="h-5 w-5" />
+                </button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[300px] sm:w-[350px] p-0">
+                <div className="flex h-full flex-col">
+                  <div className="flex items-center justify-between border-b border-primary/10 px-5 py-4">
+                    <span className="font-display text-[17px] font-semibold text-summit">Menu</span>
+                    <SheetClose asChild>
+                      <button className="rounded-md p-1.5 text-summit hover:bg-primary/5"><X className="h-5 w-5" /></button>
+                    </SheetClose>
+                  </div>
+                  <nav className="flex-1 overflow-y-auto px-5 py-6">
+                    <div className="space-y-1">
+                      <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">Services</p>
+                      {services.map((s) => (
+                        <SheetClose asChild key={s.slug}>
+                          <Link to={`/services/${s.slug}`} className="block rounded-md px-3 py-2.5 text-[14px] text-ink-soft transition-all duration-200 hover:bg-primary/5 hover:text-primary">{s.title}</Link>
+                        </SheetClose>
+                      ))}
+                    </div>
+                    <div className="mt-6 space-y-1">
+                      <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">Explore</p>
+                      <SheetClose asChild><a href="#industries" className="block rounded-md px-3 py-2.5 text-[14px] text-ink-soft transition-all duration-200 hover:bg-primary/5 hover:text-primary">Industries</a></SheetClose>
+                      <SheetClose asChild><a href="#thinking" className="block rounded-md px-3 py-2.5 text-[14px] text-ink-soft transition-all duration-200 hover:bg-primary/5 hover:text-primary">Insights</a></SheetClose>
+                      <SheetClose asChild><a href="#people" className="block rounded-md px-3 py-2.5 text-[14px] text-ink-soft transition-all duration-200 hover:bg-primary/5 hover:text-primary">People</a></SheetClose>
+                      <SheetClose asChild><a href="#contact" className="block rounded-md px-3 py-2.5 text-[14px] text-ink-soft transition-all duration-200 hover:bg-primary/5 hover:text-primary">Contact</a></SheetClose>
+                    </div>
+                    <div className="mt-6 space-y-1">
+                      <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">Tools</p>
+                      <SheetClose asChild><a href="/tax-calculator" className="block rounded-md px-3 py-2.5 text-[14px] text-ink-soft transition-all duration-200 hover:bg-primary/5 hover:text-primary">SSA Tax Calculator</a></SheetClose>
+                      <SheetClose asChild><a href="/emi-calculator" className="block rounded-md px-3 py-2.5 text-[14px] text-ink-soft transition-all duration-200 hover:bg-primary/5 hover:text-primary">EMI Calculator</a></SheetClose>
+                    </div>
+                  </nav>
+                  <div className="border-t border-primary/10 px-5 py-4">
+                    <SheetClose asChild>
+                      <a href="#contact" className="flex w-full items-center justify-center gap-2 rounded-sm gradient-cta px-6 py-3 text-[13px] font-semibold uppercase tracking-wider text-primary-foreground transition-all duration-300 hover:shadow-lg hover:shadow-primary/20">Start a project <ArrowRight className="h-3.5 w-3.5" /></a>
+                    </SheetClose>
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
       </nav>
 
       {/* Hero — full-width with background image (McKinsey/BCG style) */}
-      <section id="top" className="relative overflow-hidden min-h-[85vh] flex items-center">
+      <section id="top" className="relative overflow-hidden min-h-[70vh] sm:min-h-[85vh] flex items-center">
         {/* Background image */}
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -203,10 +249,10 @@ const Index = () => {
         <div className="relative mx-auto max-w-7xl px-5 py-32 sm:px-8 lg:py-40 z-10">
           <div className="max-w-3xl">
             <p className="mb-6 text-[12px] font-semibold uppercase tracking-[0.22em] text-primary-foreground/80">{headline.eyebrow}</p>
-            <h1 className="font-display text-[2.5rem] font-medium leading-[1.08] tracking-tight text-white sm:text-5xl lg:text-[3.75rem]">
+            <h1 className="font-display text-[1.75rem] font-medium leading-[1.08] tracking-tight text-white sm:text-[2.5rem] md:text-5xl lg:text-[3.75rem]">
               {headline.title}
             </h1>
-            <p className="mt-8 max-w-2xl text-[17px] leading-relaxed text-white/80">
+            <p className="mt-8 max-w-2xl text-[15px] leading-relaxed text-white/80 sm:text-[17px]">
               {headline.body}
             </p>
             <div className="mt-12 flex flex-wrap items-center gap-6">
@@ -263,7 +309,7 @@ const Index = () => {
       </section>
 
       {/* About */}
-      <section id="about" className="relative border-b border-primary/10 overflow-hidden min-h-[500px]">
+      <section id="about" className="relative border-b border-primary/10 overflow-hidden min-h-[400px] sm:min-h-[500px]">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.02] via-background to-secondary/[0.02]" />
         <div className="relative mx-auto grid w-full max-w-7xl gap-12 px-5 py-24 sm:px-8 lg:grid-cols-[0.4fr_0.6fr]">
           <div className="flex items-center justify-center">

@@ -29,7 +29,7 @@ const ServiceDetail = () => {
             <Icon className="h-9 w-9" />
           </div>
           <p className="mb-3 font-display text-sm font-bold uppercase text-ridge">SSA Service</p>
-          <h1 className="text-4xl font-bold leading-tight text-summit sm:text-6xl">{service.title}</h1>
+          <h1 className="text-3xl font-bold leading-tight text-summit sm:text-4xl md:text-5xl lg:text-6xl">{service.title}</h1>
           <p className="mt-6 text-lg font-semibold leading-8 text-ink-soft">{service.text}</p>
         </div>
 

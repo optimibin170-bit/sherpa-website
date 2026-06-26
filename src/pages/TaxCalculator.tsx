@@ -100,7 +100,7 @@ export default function TaxCalculator() {
         <FloatingShapes />
         <div className="relative mx-auto max-w-6xl px-4 pt-12 pb-8 sm:px-6 sm:pt-20 sm:pb-12">
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary">Salary Tax Calculator</p>
-          <h1 className="mt-3 font-display text-4xl font-semibold text-deep sm:text-6xl">
+          <h1 className="mt-3 font-display text-3xl font-semibold text-deep sm:text-4xl md:text-5xl lg:text-6xl">
             Your take-home, <span className="bg-gradient-to-r from-teal to-mint bg-clip-text text-transparent">visualised.</span>
           </h1>
           <p className="mt-5 max-w-2xl text-base text-muted-foreground">
@@ -471,7 +471,7 @@ function SlabBars({ breakdown }: { breakdown: { from: number; to: number | null;
       {breakdown.map((b, i) => {
         const pct = (b.taxable / max) * 100;
         return (
-          <div key={i} className="grid grid-cols-[110px_1fr_120px] items-center gap-3 sm:grid-cols-[160px_1fr_140px]">
+          <div key={i} className="grid grid-cols-[80px_1fr_80px] items-center gap-2 sm:grid-cols-[110px_1fr_120px] md:grid-cols-[160px_1fr_140px] sm:gap-3">
             <div className="text-xs text-muted-foreground">
               <div className="font-semibold text-deep">{(b.rate * 100).toFixed(0)}% band</div>
               <div className="truncate">
@@ -509,20 +509,20 @@ function MoneyFlow({ gross, deductions, tax, takeHome }: { gross: number; deduct
   ];
   const icons = ["💰", "🛡️", "🏛️", "🪙"];
   return (
-    <div className="mt-5 flex items-center">
+    <div className="mt-5 grid grid-cols-2 gap-2 sm:flex sm:items-center sm:gap-0">
       {items.map((it, i) => (
-        <div key={i} className="contents">
-          <div className="flex-1 rounded-xl p-4 sm:p-5" style={{ backgroundColor: it.bg }}>
-            <div className="text-xl sm:text-2xl mb-1">{icons[i]}</div>
-            <div className={`text-[10px] sm:text-[11px] font-semibold tracking-wider uppercase mb-1 ${it.dark ? "text-[#90c8b8]" : "text-[#2a5068]"}`}>
+        <div key={i} className={i < items.length - 1 ? "contents" : "contents"}>
+          <div className="flex-1 rounded-xl p-3 sm:p-4 md:p-5" style={{ backgroundColor: it.bg }}>
+            <div className="text-lg sm:text-xl md:text-2xl mb-1">{icons[i]}</div>
+            <div className={`text-[9px] sm:text-[10px] md:text-[11px] font-semibold tracking-wider uppercase mb-1 ${it.dark ? "text-[#90c8b8]" : "text-[#2a5068]"}`}>
               {it.label}
             </div>
-            <div className={`text-sm sm:text-base font-semibold ${it.dark ? "text-[#e0f5ec]" : "text-[#1a3a50]"}`}>
+            <div className={`text-xs sm:text-sm md:text-base font-semibold ${it.dark ? "text-[#e0f5ec]" : "text-[#1a3a50]"}`}>
               Rs. {formatNPR(it.value)}
             </div>
           </div>
           {i < items.length - 1 && (
-            <div className="flex items-center px-1 sm:px-1.5 shrink-0">
+            <div className="hidden sm:flex items-center px-1 sm:px-1.5 shrink-0">
               <svg width="28" height="20" viewBox="0 0 28 20" fill="none">
                 <path d="M2 10 H22 M16 4 L22 10 L16 16" stroke="#2a7a50" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>

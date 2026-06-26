@@ -108,7 +108,7 @@ export const WavyLines = () => (
 
 export const Mountain3D = () => (
   <svg
-    className="animate-float3d h-[340px] w-[340px]"
+    className="animate-float3d h-[200px] w-[200px] sm:h-[340px] sm:w-[340px]"
     viewBox="0 0 400 400"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
@@ -139,7 +139,7 @@ export const Mountain3D = () => (
 
 export const IsometricCareer = () => (
   <svg
-    className="animate-float3d h-[320px] w-[360px]"
+    className="animate-float3d h-[200px] w-[220px] sm:h-[320px] sm:w-[360px]"
     viewBox="0 0 400 360"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
