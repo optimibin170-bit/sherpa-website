@@ -110,30 +110,12 @@ const team = [
   },
   {
     name: "Pratik Budha Chettri",
-    initials: "Mr.",
-    color: "#fce7f3",
-    textColor: "#9d174d",
+    initials: "PB",
+    color: "#dbeafe",
+    textColor: "#1e40af",
     role: "AI Engineer, Technology Stack",
     tags: ["Software Architecture", "Automation", "System Integration"],
     bio: "Designs and builds tailored software solutions for operational efficiency.",
-  },
-  {
-    name: "Sita Gurung",
-    initials: "SG",
-    color: "#ecfdf5",
-    textColor: "#047857",
-    role: "Manager, Research & Analysis",
-    tags: ["Market Research", "Competitive Analysis", "Data Analytics"],
-    bio: "Leads market research, competitor analysis, and strategic insight generation.",
-  },
-  {
-    name: "Bikash Tamang",
-    initials: "BT",
-    color: "#f3f4f6",
-    textColor: "#374151",
-    role: "Senior Analyst, Finance",
-    tags: ["Accounting", "Tax Compliance", "Management Reporting"],
-    bio: "Supports accounting outsourcing, compliance, and financial reporting.",
   },
 ];
 
