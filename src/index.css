@@ -1,0 +1,297 @@
+@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600;6..96,700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 184 60% 97%;
+    --foreground: 203 55% 13%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 203 55% 13%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 152 68% 36%;
+    --primary-foreground: 152 60% 96%;
+
+    --secondary: 145 69% 47%;
+    --secondary-foreground: 156 66% 9%;
+
+    --muted: 155 35% 90%;
+    --muted-foreground: 160 18% 35%;
+
+    --accent: 215 55% 30%;
+    --accent-foreground: 210 40% 96%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 155 30% 80%;
+    --input: 155 30% 80%;
+    --ring: 152 68% 36%;
+
+    --radius: 0.85rem;
+
+    --glacier: 155 60% 90%;
+    --summit: 215 55% 28%;
+    --ridge: 142 72% 48%;
+    --sun: 6 91% 63%;
+    --surface: 155 45% 92%;
+    --surface-strong: 155 50% 84%;
+    --ink-soft: 160 18% 27%;
+    --mint: 155 60% 72%;
+    --teal: 174 72% 42%;
+    --sky: 200 80% 82%;
+    --sand: 35 60% 75%;
+    --deep: 215 55% 28%;
+
+    /* EMI Calculator brand tokens */
+    --emi-sky: oklch(0.86 0.07 220);
+    --emi-mountain: oklch(0.62 0.12 220);
+    --emi-peak: oklch(0.97 0.02 220);
+    --emi-forest: oklch(0.72 0.16 160);
+    --emi-sun: oklch(0.85 0.15 90);
+    --emi-gradient-sky: linear-gradient(180deg, oklch(0.96 0.04 220) 0%, oklch(0.88 0.08 215) 100%);
+    --emi-gradient-mountain: linear-gradient(135deg, oklch(0.68 0.13 215) 0%, oklch(0.55 0.14 230) 100%);
+    --emi-gradient-forest: linear-gradient(135deg, oklch(0.75 0.15 165) 0%, oklch(0.6 0.16 175) 100%);
+
+    --gradient-hero: radial-gradient(circle at 18% 15%, hsl(var(--glacier)) 0%, transparent 32%), linear-gradient(135deg, hsl(155 60% 96%) 0%, hsl(155 50% 88%) 48%, hsl(215 50% 90%) 100%);
+    --gradient-peak: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)) 52%, hsl(var(--secondary)));
+    --gradient-card: linear-gradient(180deg, hsl(0 0% 100% / 0.82), hsl(155 60% 96% / 0.62));
+    --shadow-elevated: 0 28px 80px -34px hsl(var(--summit) / 0.46);
+    --shadow-glow: 0 18px 56px -26px hsl(var(--primary) / 0.9);
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body antialiased;
+    letter-spacing: 0;
+  }
+
+  h1, h2, h3 {
+    @apply font-display;
+    letter-spacing: 0;
+  }
+}
+
+@layer utilities {
+  .glass-card {
+    background: linear-gradient(180deg, hsl(0 0% 100% / 0.78), hsl(184 60% 97% / 0.55));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  .glass-card-strong {
+    background: linear-gradient(180deg, hsl(0 0% 100% / 0.88), hsl(184 60% 97% / 0.72));
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+  .gradient-cta {
+    background: linear-gradient(135deg, hsl(var(--summit)), hsl(var(--primary)));
+  }
+  .gradient-hero-orb {
+    background: radial-gradient(circle, hsl(var(--primary) / 0.12) 0%, transparent 70%);
+  }
+  .gradient-hero-orb-secondary {
+    background: radial-gradient(circle, hsl(var(--secondary) / 0.08) 0%, transparent 70%);
+  }
+  .text-gradient-peak {
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .section-warm {
+    background: linear-gradient(180deg, hsl(184 60% 97%) 0%, hsl(186 50% 95%) 100%);
+  }
+  .section-cool {
+    background: linear-gradient(180deg, hsl(155 40% 96%) 0%, hsl(215 40% 94%) 100%);
+  }
+  .hover-lift {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px -8px hsl(var(--summit) / 0.18);
+  }
+  .underline-slide {
+    position: relative;
+    display: inline-block;
+  }
+  .underline-slide::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: hsl(var(--primary));
+    transition: width 0.3s ease;
+  }
+  .underline-slide:hover::after {
+    width: 100%;
+  }
+}
+
+@keyframes float3d {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33% { transform: translateY(-8px) rotate(0.5deg); }
+  66% { transform: translateY(-4px) rotate(-0.3deg); }
+}
+
+@keyframes slide-horizontal {
+  0%, 100% { transform: translateX(0px); }
+  50% { transform: translateX(12px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 hsl(var(--primary) / 0); }
+  50% { box-shadow: 0 0 20px 4px hsl(var(--primary) / 0.08); }
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@layer utilities {
+  .animate-float3d {
+    animation: float3d 6s ease-in-out infinite;
+  }
+  .animate-slide-horizontal {
+    animation: slide-horizontal 5s ease-in-out infinite;
+  }
+  .animate-pulse-glow {
+    animation: pulse-glow 3s ease-in-out infinite;
+  }
+  .animate-fade-in-up {
+    animation: fade-in-up 0.6s ease-out forwards;
+  }
+}
+
+@layer utilities {
+  .surface-hero {
+    background: linear-gradient(180deg, hsl(184 60% 97%) 0%, hsl(155 40% 94%) 50%, hsl(184 50% 96%) 100%);
+  }
+  .surface-3d {
+    background: linear-gradient(180deg, hsl(0 0% 100% / 0.92), hsl(184 50% 96% / 0.75));
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 16px 48px -12px hsl(215 55% 28% / 0.18), 0 4px 12px -2px hsl(215 55% 28% / 0.08);
+  }
+  .chip-3d {
+    background: linear-gradient(135deg, hsl(155 60% 90%), hsl(174 60% 85%));
+    box-shadow: 0 2px 8px -2px hsl(215 55% 28% / 0.2), inset 0 1px 0 rgba(255,255,255,0.6);
+  }
+  .btn-3d-primary {
+    background: linear-gradient(135deg, hsl(152 68% 36%), hsl(174 72% 42%));
+    color: hsl(152 60% 96%);
+    box-shadow: 0 4px 14px -3px hsl(152 68% 36% / 0.5), inset 0 1px 0 rgba(255,255,255,0.25);
+  }
+  .btn-3d-primary:hover {
+    background: linear-gradient(135deg, hsl(152 68% 32%), hsl(174 72% 38%));
+    box-shadow: 0 6px 20px -4px hsl(152 68% 36% / 0.6), inset 0 1px 0 rgba(255,255,255,0.25);
+  }
+  .btn-3d-primary-hover {
+    background: linear-gradient(135deg, hsl(152 68% 32%), hsl(174 72% 38%));
+  }
+  .shadow-soft {
+    box-shadow: 0 4px 20px -8px rgba(20, 60, 110, 0.3);
+  }
+}
+
+@utility brand-range {
+  appearance: none;
+  width: 100%;
+  height: 10px;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, var(--emi-forest) 0%, var(--emi-mountain) var(--progress, 50%), color-mix(in oklab, var(--emi-mountain) 15%, transparent) var(--progress, 50%));
+  outline: none;
+  cursor: pointer;
+  &::-webkit-slider-thumb {
+    appearance: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 9999px;
+    background: white;
+    border: 4px solid var(--emi-mountain);
+    box-shadow: 0 4px 20px -8px rgba(20, 60, 110, 0.3);
+    cursor: grab;
+    transition: transform 0.15s ease;
+  }
+  &::-webkit-slider-thumb:hover { transform: scale(1.15); }
+  &::-moz-range-thumb {
+    width: 26px;
+    height: 26px;
+    border-radius: 9999px;
+    background: white;
+    border: 4px solid var(--emi-mountain);
+    cursor: grab;
+  }
+}
