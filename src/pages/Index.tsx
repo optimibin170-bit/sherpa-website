@@ -398,7 +398,7 @@ const Index = () => {
                       <div className={`flex h-12 w-12 items-center justify-center rounded-xl bg-primary/5 transition-all duration-300 group-hover:bg-primary/10 group-hover:scale-110 group-hover:shadow-md`}>
                         <Icon className={`h-5 w-5 ${ind.color}`} />
                       </div>
-                      <span className="hidden sm:inline text-[11px] font-semibold uppercase tracking-wider text-primary/40 group-hover:text-primary/70 transition-colors duration-300">{stats[i]}</span>
+                      <span className="hidden text-[11px] font-semibold uppercase tracking-wider text-primary/40 group-hover:text-primary/70 transition-colors duration-300">{stats[i]}</span>
                     </div>
                     <h3 className="mt-4 font-display text-[1.05rem] text-summit group-hover:text-primary transition-colors duration-300">{ind.name}</h3>
                     <p className="mt-2 text-[13px] leading-relaxed text-ink-soft">{ind.description}</p>
@@ -467,6 +467,9 @@ const Index = () => {
       {/* Testimonial — scrollable carousel with floating panels */}
       <section className="relative border-b border-primary/10 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-summit/5 via-background to-primary/5" />
+        <div className="relative mx-auto w-full max-w-7xl px-5 pt-12 sm:px-8 sm:pt-20">
+          <span className="inline-block rounded-full border border-primary/20 bg-white/60 px-5 py-2 text-[13px] font-semibold uppercase tracking-wider text-primary backdrop-blur-sm">Testimonial</span>
+        </div>
         <TopographyPattern />
         <div className="relative mx-auto w-full max-w-7xl px-5 py-12 sm:px-8 sm:py-20">
           <div className="grid gap-8 lg:grid-cols-[280px_1fr] items-start">
