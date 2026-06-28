@@ -84,7 +84,7 @@ const clientLogos = [
 const team = [
   {
     name: "Navin Giri",
-    initials: "Mr.",
+    initials: "NG",
     color: "#dbeafe",
     textColor: "#1e40af",
     role: "CEO",
@@ -93,7 +93,7 @@ const team = [
   },
   {
     name: "Nischal Gautam",
-    initials: "Mr.",
+    initials: "NG",
     color: "#d1fae5",
     textColor: "#065f46",
     role: "Srtategic Partner, ",
@@ -102,7 +102,7 @@ const team = [
   },
   {
     name: "Lalit Budha",
-    initials: "Mr.",
+    initials: "LB",
     color: "#ede9fe",
     textColor: "#5b21b6",
     role: "Partner, Business Development",
