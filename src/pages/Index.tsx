@@ -271,7 +271,7 @@ const Index = () => {
         <div className="mx-auto grid w-full max-w-7xl grid-cols-3 divide-x divide-white/10 px-5 sm:px-8">
           {metrics.map((m) => (
             <div key={m.label} className="py-10 text-center sm:py-14">
-              <div className="font-display text-[2.25rem] font-medium text-white sm:text-[2.75rem]">{m.value}</div>
+              <div className="font-display text-[1.75rem] font-medium text-white sm:text-[2.25rem] md:text-[2.75rem]">{m.value}</div>
               <div className="mt-2.5 text-[12px] uppercase tracking-wider text-white/60 leading-snug px-4">{m.label}</div>
             </div>
           ))}
@@ -289,12 +289,12 @@ const Index = () => {
             </div>
             <a href="#" className="hidden text-[14px] font-semibold text-summit hover:text-primary transition-all duration-300 sm:inline-flex">View all case studies →</a>
           </div>
-          <div className="grid gap-8 md:grid-cols-3">
+          <div className="grid gap-4 sm:gap-8 md:grid-cols-3">
             {caseStudies.map((study, i) => (
               <article key={study.title} className={`group relative overflow-hidden rounded-lg border border-primary/10 transition-all duration-300 hover-lift ${i === 0 ? "md:col-span-2 md:row-span-2" : ""}`}>
-                <div className={`w-full bg-cover bg-center transition-all duration-500 group-hover:scale-105 ${i === 0 ? "aspect-[16/10]" : "aspect-[4/3]"}`} style={{ backgroundImage: `url('${study.image}')` }} />
+                <div className={`w-full bg-cover bg-center transition-all duration-500 group-hover:scale-105 ${i === 0 ? "aspect-[4/3] sm:aspect-[16/10]" : "aspect-[4/3]"}`} style={{ backgroundImage: `url('${study.image}')` }} />
                 <div className="absolute inset-0 bg-gradient-to-t from-summit/90 via-summit/40 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-6">
+                <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6">
                   <p className="text-[12px] font-semibold uppercase tracking-[0.2em] text-primary-foreground/70">{study.category}</p>
                   <h3 className="mt-2 font-display text-[1.15rem] leading-snug text-white group-hover:text-primary-foreground transition-colors duration-300">{study.title}</h3>
                   <div className="mt-4 flex items-baseline gap-2">
@@ -340,18 +340,18 @@ const Index = () => {
             <p className="text-[12px] font-semibold uppercase tracking-[0.22em] text-summit">What we do</p>
             <h2 className="mt-3 font-display text-[1.85rem] text-summit sm:text-[2.35rem]">Four ways we help you grow</h2>
           </div>
-          <div className="grid gap-6 md:grid-cols-2">
+          <div className="grid gap-4 sm:gap-6 md:grid-cols-2">
             {capabilities.map((c, i) => (
               <Link key={c.step} to={`/services/${services[i]?.slug ?? services[0].slug}`} className={`group relative overflow-hidden rounded-lg border border-primary/10 transition-all duration-300 hover-lift ${i === 0 ? "md:col-span-2" : ""}`}>
-                <div className={`w-full bg-cover bg-center transition-all duration-500 group-hover:scale-105 ${i === 0 ? "aspect-[21/9]" : "aspect-[16/9]"}`} style={{ backgroundImage: `url('${c.image}')` }} />
+                <div className={`w-full bg-cover bg-center transition-all duration-500 group-hover:scale-105 ${i === 0 ? "aspect-[16/9] sm:aspect-[21/9]" : "aspect-[16/9]"}`} style={{ backgroundImage: `url('${c.image}')` }} />
                 <div className="absolute inset-0 bg-gradient-to-t from-summit/90 via-summit/50 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <div className="flex items-center gap-3 mb-2">
-                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-[13px] font-medium text-primary-foreground">{c.step}</span>
-                    <h3 className="font-display text-[1.25rem] text-white">{c.title}</h3>
+                <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6">
+                  <div className="flex items-center gap-2.5 sm:gap-3 mb-1.5 sm:mb-2">
+                    <span className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-primary text-[12px] sm:text-[13px] font-medium text-primary-foreground">{c.step}</span>
+                    <h3 className="font-display text-[1.1rem] sm:text-[1.25rem] text-white">{c.title}</h3>
                   </div>
-                  <p className="max-w-2xl text-[15px] leading-relaxed text-white/80">{c.text}</p>
-                  <span className="mt-4 inline-flex items-center gap-2 text-[14px] font-semibold text-white opacity-0 transition-all duration-300 group-hover:opacity-100">Learn more <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" /></span>
+                  <p className="max-w-2xl text-[13px] sm:text-[15px] leading-relaxed text-white/80">{c.text}</p>
+                  <span className="mt-3 sm:mt-4 inline-flex items-center gap-2 text-[13px] sm:text-[14px] font-semibold text-white opacity-0 transition-all duration-300 group-hover:opacity-100">Learn more <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" /></span>
                 </div>
               </Link>
             ))}
@@ -483,7 +483,7 @@ const Index = () => {
       <section className="relative border-b border-primary/10 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-summit/5 via-background to-primary/5" />
         <TopographyPattern />
-        <div className="relative mx-auto w-full max-w-7xl px-5 py-20 sm:px-8">
+        <div className="relative mx-auto w-full max-w-7xl px-5 py-12 sm:px-8 sm:py-20">
           <div className="grid gap-8 lg:grid-cols-[280px_1fr] items-start">
             <div className="hidden lg:flex justify-center lg:sticky lg:top-32">
               {testimonialIndex === 0 && <TestimonialVisual1 />}
@@ -622,7 +622,7 @@ const Index = () => {
         />
         <div className="absolute inset-0 bg-gradient-to-br from-background/95 via-background/90 to-primary/[0.03]" />
         <DotsPattern />
-        <div className="relative mx-auto grid w-full max-w-7xl gap-16 px-5 py-24 sm:px-8 lg:grid-cols-[1fr_0.6fr]">
+        <div className="relative mx-auto grid w-full max-w-7xl gap-8 px-5 py-16 sm:gap-16 sm:px-8 sm:py-24 lg:grid-cols-[1fr_0.6fr]">
           <form onSubmit={handleSubmit} className="grid gap-5 rounded-xl border-t-2 border-primary p-2 pt-8 glass-card shadow-elevated">
             <p className="text-[12px] font-semibold uppercase tracking-[0.22em] text-summit">Request a proposal</p>
             <label className="grid gap-2.5 text-[12px] font-semibold uppercase tracking-[0.18em] text-ink-soft">Name<input name="name" maxLength={100} className="rounded-md border border-primary/10 bg-white/50 px-4 py-3.5 text-[15px] font-normal normal-case tracking-normal text-summit outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all duration-300" /></label>
