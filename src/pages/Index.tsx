@@ -1,7 +1,7 @@
 import {
   ArrowRight, ArrowUpRight, ChevronDown, ChevronLeft, ChevronRight, Mail, MapPin, Search,
   Building2, Laptop, Briefcase, ShoppingCart, HeartPulse, Zap,
-  Clock, Users, Globe, Menu, X,
+  Clock, Users, Globe, Menu,
 } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -194,11 +194,8 @@ const Index = () => {
               </SheetTrigger>
               <SheetContent side="right" className="w-[300px] sm:w-[350px] p-0">
                 <div className="flex h-full flex-col">
-                  <div className="flex items-center justify-between border-b border-primary/10 px-5 py-4">
+                  <div className="flex items-center border-b border-primary/10 px-5 py-4">
                     <span className="font-display text-[17px] font-semibold text-summit">Menu</span>
-                    <SheetClose asChild>
-                      <button className="rounded-md p-1.5 text-summit hover:bg-primary/5"><X className="h-5 w-5" /></button>
-                    </SheetClose>
                   </div>
                   <nav className="flex-1 overflow-y-auto px-5 py-6">
                     <div className="space-y-1">
@@ -416,18 +413,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Client Logos Strip */}
-      <section className="hidden sm:block relative border-b border-primary/10 bg-primary/[0.03]">
-        <div className="mx-auto w-full max-w-7xl px-5 py-12 sm:px-8">
-          <p className="text-center text-[12px] font-semibold uppercase tracking-[0.22em] text-muted-foreground mb-8">Trusted by forward-thinking companies</p>
-          <div className="flex flex-wrap items-center justify-center gap-12 opacity-40">
-            {clientLogos.map((logo) => (
-              <span key={logo} className="font-display text-[1.25rem] font-medium text-summit">{logo}</span>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Thinking / Insights */}
       <section id="thinking" className="relative border-b border-primary/10 overflow-hidden">
         <DotsPattern />
@@ -490,16 +475,17 @@ const Index = () => {
               {testimonialIndex === 1 && <TestimonialVisual2 />}
             </div>
             <div className="mx-auto max-w-3xl">
-              <blockquote key={testimonialIndex} className="animate-fade-in-up">
+              <blockquote key={testimonialIndex} className="animate-fade-in-up relative rounded-2xl border border-primary/10 bg-white/50 p-6 sm:p-8 sm:rounded-none sm:border-0 sm:bg-transparent sm:p-0">
+                <span className="block text-[3rem] sm:text-[4rem] leading-none text-summit/10 sm:text-primary/10 font-serif mb-3 sm:mb-4 select-none" aria-hidden="true">"</span>
                 <p className="text-[15px] leading-relaxed text-summit/90 sm:text-[16px]">
                   {testimonials[testimonialIndex].quote}
                 </p>
               </blockquote>
-              <figcaption className="mt-8 border-t border-primary/10 pt-5">
+              <figcaption className="mt-6 sm:mt-8 border-t border-primary/10 pt-4 sm:pt-5">
                 <div className="font-semibold text-summit">{testimonials[testimonialIndex].name}</div>
                 <div className="text-[13px] text-muted-foreground">{testimonials[testimonialIndex].title}</div>
               </figcaption>
-              <div className="mt-8 flex items-center gap-4">
+              <div className="mt-6 sm:mt-8 flex items-center gap-4">
                 <button
                   onClick={() => setTestimonialIndex((prev) => (prev === 0 ? testimonials.length - 1 : prev - 1))}
                   className="flex h-8 w-8 items-center justify-center rounded-full border border-primary/20 text-summit transition-all duration-300 hover:bg-primary/5 hover:border-primary/40"
