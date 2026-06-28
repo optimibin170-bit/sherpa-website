@@ -401,7 +401,7 @@ const Index = () => {
                       <div className={`flex h-12 w-12 items-center justify-center rounded-xl bg-primary/5 transition-all duration-300 group-hover:bg-primary/10 group-hover:scale-110 group-hover:shadow-md`}>
                         <Icon className={`h-5 w-5 ${ind.color}`} />
                       </div>
-                      <span className="text-[11px] font-semibold uppercase tracking-wider text-primary/40 group-hover:text-primary/70 transition-colors duration-300">{stats[i]}</span>
+                      <span className="hidden sm:inline text-[11px] font-semibold uppercase tracking-wider text-primary/40 group-hover:text-primary/70 transition-colors duration-300">{stats[i]}</span>
                     </div>
                     <h3 className="mt-4 font-display text-[1.05rem] text-summit group-hover:text-primary transition-colors duration-300">{ind.name}</h3>
                     <p className="mt-2 text-[13px] leading-relaxed text-ink-soft">{ind.description}</p>
@@ -417,7 +417,7 @@ const Index = () => {
       </section>
 
       {/* Client Logos Strip */}
-      <section className="relative border-b border-primary/10 bg-primary/[0.03]">
+      <section className="hidden sm:block relative border-b border-primary/10 bg-primary/[0.03]">
         <div className="mx-auto w-full max-w-7xl px-5 py-12 sm:px-8">
           <p className="text-center text-[12px] font-semibold uppercase tracking-[0.22em] text-muted-foreground mb-8">Trusted by forward-thinking companies</p>
           <div className="flex flex-wrap items-center justify-center gap-12 opacity-40">
