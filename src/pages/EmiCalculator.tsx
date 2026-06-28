@@ -51,7 +51,7 @@ function Slider({
             onFocus={() => { setDraft(""); setFocused(true); }}
             onChange={(e) => { setDraft(e.target.value); if (e.target.value !== "") commit(e.target.value); }}
             onBlur={(e) => { setFocused(false); if (e.target.value === "") return; commit(e.target.value); }}
-            className="w-28 bg-transparent text-right font-display font-semibold text-foreground tabular-nums outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none placeholder:text-muted-foreground/60 placeholder:font-normal placeholder:text-xs"
+            className="w-20 sm:w-28 bg-transparent text-right font-display font-semibold text-foreground tabular-nums outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none placeholder:text-muted-foreground/60 placeholder:font-normal placeholder:text-xs"
           />
           <span className="text-xs text-muted-foreground pr-2">{unit}</span>
         </div>
@@ -212,7 +212,7 @@ export default function EmiCalculator() {
             />
 
             {/* Quick stat strip */}
-            <div className="grid grid-cols-3 gap-3 pt-2">
+            <div className="grid grid-cols-3 gap-2 sm:gap-3 pt-2">
               <StatChip label="Monthly EMI" value={`Rs${inr(emi)}`} tone="mountain" big />
               <StatChip label="Total Interest" value={`Rs${inr(totalInterest)}`} tone="forest" />
               <StatChip label="Total Payable" value={`Rs${inr(totalPayment)}`} tone="sun" />
@@ -304,9 +304,9 @@ export default function EmiCalculator() {
 function StatChip({ label, value, tone, big }: { label: string; value: string; tone: "mountain" | "forest" | "sun"; big?: boolean }) {
   const bg = tone === "mountain" ? "var(--emi-gradient-mountain)" : tone === "forest" ? "var(--emi-gradient-forest)" : "linear-gradient(135deg, var(--emi-sun), #d4a017)";
   return (
-    <div className="rounded-2xl p-4 text-white shadow-soft" style={{ background: bg }}>
-      <div className="text-[10px] uppercase tracking-wider opacity-90">{label}</div>
-      <div className={`font-display font-bold tabular-nums ${big ? "text-2xl" : "text-lg"}`}>{value}</div>
+    <div className="rounded-xl sm:rounded-2xl p-2.5 sm:p-4 text-white shadow-soft overflow-hidden" style={{ background: bg }}>
+      <div className="text-[8px] sm:text-[10px] uppercase tracking-wider opacity-90 truncate">{label}</div>
+      <div className={`font-display font-bold tabular-nums truncate ${big ? "text-base sm:text-2xl" : "text-sm sm:text-lg"}`}>{value}</div>
     </div>
   );
 }
