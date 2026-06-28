@@ -475,11 +475,12 @@ const Index = () => {
               {testimonialIndex === 1 && <TestimonialVisual2 />}
             </div>
             <div className="mx-auto max-w-3xl">
-              <blockquote key={testimonialIndex} className="animate-fade-in-up relative rounded-2xl border border-primary/10 bg-white/50 p-6 sm:p-8 sm:rounded-none sm:border-0 sm:bg-transparent sm:p-0">
-                <span className="block text-[3rem] sm:text-[4rem] leading-none text-summit/10 sm:text-primary/10 font-serif mb-3 sm:mb-4 select-none" aria-hidden="true">"</span>
-                <p className="text-[15px] leading-relaxed text-summit/90 sm:text-[16px]">
+              <blockquote key={testimonialIndex} className="animate-fade-in-up relative rounded-2xl border border-primary/10 bg-white/50 p-6 sm:rounded-none sm:border-0 sm:bg-transparent sm:p-0">
+                <span className="block text-[2.5rem] md:text-[3.5rem] lg:text-[4rem] leading-none text-summit/10 sm:text-primary/10 font-serif mb-3 sm:mb-4 select-none" aria-hidden="true">&quot;</span>
+                <p className="text-[17px] md:text-[18px] lg:text-[19px] leading-relaxed text-summit/90 sm:text-[16px]">
                   {testimonials[testimonialIndex].quote}
                 </p>
+                <span className="block text-[2.5rem] md:text-[3.5rem] lg:text-[4rem] leading-none text-summit/10 sm:text-primary/10 font-serif text-right mt-3 sm:mt-4 select-none" aria-hidden="true">&quot;</span>
               </blockquote>
               <figcaption className="mt-6 sm:mt-8 border-t border-primary/10 pt-4 sm:pt-5">
                 <div className="font-semibold text-summit">{testimonials[testimonialIndex].name}</div>
