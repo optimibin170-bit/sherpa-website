@@ -30,19 +30,21 @@ export function HierarchyStatement({ title, subtitle, cyLabel = "FY 2083-84", py
           {children}
         </div>
       </header>
-      <table className="w-full text-sm">
-        <thead>
-          <tr className="text-xs uppercase tracking-wider text-muted-foreground">
-            <th className="px-6 py-3 text-left">Particulars</th>
-            {showOp && <th className="w-40 px-6 py-3 text-right text-muted-foreground/80">{opLabel}</th>}
-            <th className="w-44 px-6 py-3 text-right">{cyLabel}</th>
-            <th className="w-44 px-6 py-3 text-right text-muted-foreground/80">{pyLabel}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {sections.map((s, i) => <SectionBody key={i} section={s} showOp={showOp} depth={depth} />)}
-        </tbody>
-      </table>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="text-xs uppercase tracking-wider text-muted-foreground">
+              <th className="px-6 py-3 text-left">Particulars</th>
+              {showOp && <th className="w-40 px-6 py-3 text-right text-muted-foreground/80">{opLabel}</th>}
+              <th className="w-44 px-6 py-3 text-right">{cyLabel}</th>
+              <th className="w-44 px-6 py-3 text-right text-muted-foreground/80">{pyLabel}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sections.map((s, i) => <SectionBody key={i} section={s} showOp={showOp} depth={depth} />)}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

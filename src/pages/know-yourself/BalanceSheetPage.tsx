@@ -84,7 +84,7 @@ export default function BalanceSheetPage() {
         subtitle="Statement of Financial Position"
         description="Comparative NFRS Balance Sheet with drill-down from Non-Current Assets, Current Assets, Equity, Non-Current Liabilities and Current Liabilities."
       />
-      <div className="px-8 py-8 space-y-6">
+      <div className="px-4 py-6 space-y-4 md:px-8 md:py-8 md:space-y-6">
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
           <div className="rounded-lg border bg-card p-4"><div className="text-xs uppercase tracking-wider text-muted-foreground">Total Assets</div><div className="mt-1 font-display text-xl tabular-nums">{formatNPR(totalAssetsCy, { showZero: true })}</div></div>
           <div className="rounded-lg border bg-card p-4"><div className="text-xs uppercase tracking-wider text-muted-foreground">Total Equity</div><div className="mt-1 font-display text-xl tabular-nums">{formatNPR(eqS.cy, { showZero: true })}</div></div>

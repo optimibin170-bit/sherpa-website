@@ -73,7 +73,7 @@ export default function ProfitLossPage() {
   return (
     <AppShell>
       <PageHeader eyebrow="Step 04" title="Profit & Loss" subtitle="Statement of Profit or Loss" description="Comparative NFRS P&L with revenue, COGS, operating expenses, finance costs, depreciation and tax — with drill-down to ledger level." />
-      <div className="px-8 py-8 space-y-6">
+      <div className="px-4 py-6 space-y-4 md:px-8 md:py-8 md:space-y-6">
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
           <div className="rounded-lg border bg-card p-4"><div className="text-xs uppercase tracking-wider text-muted-foreground">Revenue</div><div className="mt-1 font-display text-xl tabular-nums">{formatNPR(rev.cy, { showZero: true })}</div></div>
           <div className="rounded-lg border bg-card p-4"><div className="text-xs uppercase tracking-wider text-muted-foreground">Net Profit</div><div className="mt-1 font-display text-xl tabular-nums">{formatNPR(np.profitCy, { showZero: true })}</div></div>

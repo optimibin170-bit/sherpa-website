@@ -11,7 +11,7 @@ export default function PlatformPage() {
   return (
     <AppShell>
       <PageHeader eyebrow="Step 03" title="Platform · Adjustments" description="Post year-end adjustments — closing stock, depreciation, prepaid and accrued expenses — before finalising the financial statements." />
-      <div className="px-8 py-8 space-y-8">
+      <div className="px-4 py-6 space-y-6 md:px-8 md:py-8 md:space-y-8">
         {!master.companyName && (
           <div className="rounded-lg border border-dashed bg-card p-10 text-center">
             <div className="font-display text-xl">Set up your company first</div>
@@ -69,7 +69,7 @@ function StockSection() {
         </div>
       </div>
       {closingStock.length > 0 && (
-        <div className="rounded-xl border bg-card">
+        <div className="overflow-x-auto rounded-xl border bg-card">
           <table className="w-full text-sm">
             <thead><tr className="text-xs uppercase tracking-wider text-muted-foreground"><th className="px-6 py-3 text-left">Item</th><th className="px-3 py-3 text-left">Bucket</th><th className="px-6 py-3 text-right">Value</th><th className="px-6 py-3 text-left">Notes</th><th className="w-12 px-3 py-3"></th></tr></thead>
             <tbody>{closingStock.map((e) => (
@@ -113,7 +113,7 @@ function DepreciationSection() {
         <p className="mt-2 text-xs text-muted-foreground">Depreciation is auto-calculated as (Opening WDV + Additions) × Rate% using WDV method.</p>
       </div>
       {depreciation.length > 0 && (
-        <div className="rounded-xl border bg-card">
+        <div className="overflow-x-auto rounded-xl border bg-card">
           <table className="w-full text-sm">
             <thead><tr className="text-xs uppercase tracking-wider text-muted-foreground"><th className="px-6 py-3 text-left">Asset</th><th className="px-3 py-3 text-left">Schedule</th><th className="px-3 py-3 text-right">Rate</th><th className="px-3 py-3 text-right">Opening</th><th className="px-3 py-3 text-right">Additions</th><th className="px-3 py-3 text-right">Depreciation</th><th className="w-12 px-3 py-3"></th></tr></thead>
             <tbody>{depreciation.map((e) => (
@@ -158,7 +158,7 @@ function AccrualsSection() {
         </div>
       </div>
       {accruals.length > 0 && (
-        <div className="rounded-xl border bg-card">
+        <div className="overflow-x-auto rounded-xl border bg-card">
           <table className="w-full text-sm">
             <thead><tr className="text-xs uppercase tracking-wider text-muted-foreground"><th className="px-6 py-3 text-left">Account</th><th className="px-3 py-3 text-left">Kind</th><th className="px-6 py-3 text-right">Amount</th><th className="px-6 py-3 text-left">Notes</th><th className="w-12 px-3 py-3"></th></tr></thead>
             <tbody>{accruals.map((e) => (

@@ -20,7 +20,7 @@ export default function COAPage() {
         description={`A teaching view of the NFRS-aligned chart of accounts — ${COA.length.toLocaleString()} ledgers grouped into Classification → Parent → Category → Schedule Head.`}
         actions={<Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search schedule heads, categories, parents…" className="w-80" />}
       />
-      <div className="px-8 py-8">
+      <div className="px-4 py-6 md:px-8 md:py-8">
         <WorkflowStrip />
         <div className="grid gap-6 lg:grid-cols-3">
           {tree.map((node) => (

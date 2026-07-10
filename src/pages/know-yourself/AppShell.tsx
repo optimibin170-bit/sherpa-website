@@ -1,6 +1,7 @@
 import { useLocation, Link } from "react-router-dom";
-import type { ReactNode } from "react";
+import { type ReactNode, useState, useEffect } from "react";
 import { useTrialBalance } from "@/store/trialBalance";
+import { Menu, X } from "lucide-react";
 
 const NAV = [
   { to: "/know-yourself", label: "Overview", caption: "Dashboard", exact: true },
@@ -18,10 +19,31 @@ export function AppShell({ children }: { children?: ReactNode }) {
   const pathname = useLocation().pathname;
   const master = useTrialBalance((s) => s.master);
   const subtitle = master.companyName ? `${master.companyName} · ${master.cy.label}` : "NFRS · No period set";
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  useEffect(() => { setSidebarOpen(false); }, [pathname]);
+
   return (
     <div className="flex min-h-screen bg-background text-foreground">
-      <aside className="sticky top-0 flex h-screen w-72 shrink-0 flex-col overflow-y-auto border-r border-border bg-card print:hidden">
-        <div className="px-6 py-7">
+      <button
+        onClick={() => setSidebarOpen(true)}
+        className="fixed left-3 top-3 z-50 inline-flex items-center justify-center rounded-md border border-border bg-card p-2 shadow-md md:hidden"
+        aria-label="Open menu"
+      >
+        <Menu className="h-5 w-5" />
+      </button>
+
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/40 md:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 flex w-72 flex-col overflow-y-auto border-r border-border bg-card transition-transform duration-200 md:sticky md:top-0 md:h-screen md:translate-x-0 md:shrink-0 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
+      >
+        <div className="flex items-center justify-between px-6 py-7">
           <div className="flex items-center gap-2">
             <div className="grid h-9 w-9 place-items-center rounded-md bg-summit text-white font-display text-lg">
               F
@@ -31,6 +53,13 @@ export function AppShell({ children }: { children?: ReactNode }) {
               <div className="text-xs text-muted-foreground">{subtitle}</div>
             </div>
           </div>
+          <button
+            onClick={() => setSidebarOpen(false)}
+            className="inline-flex items-center justify-center rounded-md p-1 text-muted-foreground hover:text-foreground md:hidden"
+            aria-label="Close menu"
+          >
+            <X className="h-5 w-5" />
+          </button>
         </div>
         <nav className="flex-1 px-3">
           {NAV.map((item) => {
@@ -52,18 +81,18 @@ export function AppShell({ children }: { children?: ReactNode }) {
           <div className="mt-2">Reporting currency · NPR</div>
         </div>
       </aside>
-      <main className="flex-1 overflow-x-hidden">{children}</main>
+      <main className="flex-1 overflow-x-hidden min-w-0">{children}</main>
     </div>
   );
 }
 
 export function PageHeader({ eyebrow, title, description, actions }: { eyebrow?: string; title: string; description?: string; actions?: ReactNode }) {
   return (
-    <header className="border-b border-border bg-muted/30 px-8 py-7">
-      <div className="flex items-end justify-between gap-6">
+    <header className="border-b border-border bg-muted/30 px-4 py-5 md:px-8 md:py-7">
+      <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
           {eyebrow && <div className="mb-2 text-xs font-medium uppercase tracking-[0.18em] text-accent">{eyebrow}</div>}
-          <h1 className="font-display text-3xl text-foreground">{title}</h1>
+          <h1 className="font-display text-2xl text-foreground md:text-3xl">{title}</h1>
           {description && <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{description}</p>}
         </div>
         {actions && <div className="flex shrink-0 items-center gap-2 print:hidden">{actions}</div>}

@@ -14,19 +14,21 @@ export function StatementTable({ title, subtitle, lines, cyLabel = "FY 2083-84",
         <h2 className="font-display text-2xl">{title}</h2>
         {subtitle && <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p>}
       </header>
-      <table className="w-full text-sm">
-        <thead>
-          <tr className="text-xs uppercase tracking-wider text-muted-foreground">
-            <th className="px-6 py-3 text-left">Particulars</th>
-            <th className="w-20 px-3 py-3 text-right">Note</th>
-            <th className="w-44 px-6 py-3 text-right">{cyLabel}</th>
-            <th className="w-44 px-6 py-3 text-right text-muted-foreground/80">{pyLabel}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {lines.map((l, i) => <StatementRow key={i} line={l} />)}
-        </tbody>
-      </table>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="text-xs uppercase tracking-wider text-muted-foreground">
+              <th className="px-6 py-3 text-left">Particulars</th>
+              <th className="w-20 px-3 py-3 text-right">Note</th>
+              <th className="w-44 px-6 py-3 text-right">{cyLabel}</th>
+              <th className="w-44 px-6 py-3 text-right text-muted-foreground/80">{pyLabel}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {lines.map((l, i) => <StatementRow key={i} line={l} />)}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

@@ -23,7 +23,7 @@ export default function KnowYourselfLanding() {
         title="Financial statements, end to end"
         description="A deliberate workflow from chart of accounts to a board-ready Balance Sheet and P&L — with a Platform layer for closing stock, depreciation and accruals before finalisation."
       />
-      <div className="px-8 py-8">
+      <div className="px-4 py-6 md:px-8 md:py-8">
         <div className="grid gap-3 md:grid-cols-4">
           {stats.map((s) => (
             <div key={s.label} className="rounded-lg border bg-card p-5">

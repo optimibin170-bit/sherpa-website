@@ -42,7 +42,7 @@ export default function RatiosPage() {
   return (
     <AppShell>
       <PageHeader eyebrow="Step 05" title="Ratio Analysis" description="21 financial ratios across profitability, liquidity, leverage, solvency and efficiency — computed from your Trial Balance and Platform adjustments." />
-      <div className="px-8 py-8 space-y-6">
+      <div className="px-4 py-6 space-y-4 md:px-8 md:py-8 md:space-y-6">
         <Tabs defaultValue="Profitability">
           <TabsList className="grid w-full grid-cols-5">
             {CATEGORIES.map((c) => <TabsTrigger key={c} value={c}>{c}</TabsTrigger>)}

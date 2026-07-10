@@ -12,26 +12,28 @@ export function AnalysisPanel({ title, subtitle, cyLabel, pyLabel, sections }: {
         <h2 className="font-display text-xl">{title}</h2>
         {subtitle && <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p>}
       </header>
-      <table className="w-full text-sm">
-        <thead>
-          <tr className="text-[11px] uppercase tracking-wider text-muted-foreground">
-            <th className="px-6 py-3 text-left">Particulars</th>
-            <th className="w-32 px-3 py-3 text-right">{cyLabel}</th>
-            <th className="w-20 px-3 py-3 text-right">% CY</th>
-            <th className="w-32 px-3 py-3 text-right text-muted-foreground/80">{pyLabel}</th>
-            <th className="w-20 px-3 py-3 text-right text-muted-foreground/80">% PY</th>
-            <th className="w-28 px-3 py-3 text-right">YoY change</th>
-            <th className="w-20 px-3 py-3 text-right">YoY %</th>
-          </tr>
-        </thead>
-        <tbody>
-          {sections.map((s, si) => {
-            const baseCy = s.base?.cy ?? s.rows.find((r) => r.emphasis === "total")?.cy ?? 0;
-            const basePy = s.base?.py ?? s.rows.find((r) => r.emphasis === "total")?.py ?? 0;
-            return <SectionBody key={si} section={s} baseCy={baseCy} basePy={basePy} />;
-          })}
-        </tbody>
-      </table>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="text-[11px] uppercase tracking-wider text-muted-foreground">
+              <th className="px-6 py-3 text-left">Particulars</th>
+              <th className="w-32 px-3 py-3 text-right">{cyLabel}</th>
+              <th className="w-20 px-3 py-3 text-right">% CY</th>
+              <th className="w-32 px-3 py-3 text-right text-muted-foreground/80">{pyLabel}</th>
+              <th className="w-20 px-3 py-3 text-right text-muted-foreground/80">% PY</th>
+              <th className="w-28 px-3 py-3 text-right">YoY change</th>
+              <th className="w-20 px-3 py-3 text-right">YoY %</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sections.map((s, si) => {
+              const baseCy = s.base?.cy ?? s.rows.find((r) => r.emphasis === "total")?.cy ?? 0;
+              const basePy = s.base?.py ?? s.rows.find((r) => r.emphasis === "total")?.py ?? 0;
+              return <SectionBody key={si} section={s} baseCy={baseCy} basePy={basePy} />;
+            })}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

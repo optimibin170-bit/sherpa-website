@@ -95,7 +95,7 @@ export default function CashFlowPage() {
   return (
     <AppShell>
       <PageHeader eyebrow="Statement" title="Cash Flow Statement" subtitle="Indirect Method" description="Operating, investing and financing cash flows derived from the Trial Balance and Platform adjustments." />
-      <div className="px-8 py-8 space-y-6">
+      <div className="px-4 py-6 space-y-4 md:px-8 md:py-8 md:space-y-6">
         <PendingBanner>This is a simplified cash flow from TB data. For a complete NAS 7 statement, reconcile with bank statements and non-cash items.</PendingBanner>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           <div className="rounded-lg border bg-card p-4"><div className="text-xs uppercase tracking-wider text-muted-foreground">Operating</div><div className="mt-1 font-display text-xl tabular-nums">{formatNPR(operatingCashCy, { showZero: true })}</div></div>

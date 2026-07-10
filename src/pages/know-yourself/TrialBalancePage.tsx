@@ -45,7 +45,7 @@ export default function TrialBalancePage() {
   return (
     <AppShell>
       <PageHeader eyebrow="Step 02" title="Trial Balance" description="Upload the year-end Trial Balance (Excel). Once mapped to the Chart of Accounts, the Balance Sheet and P&L populate automatically." />
-      <div className="px-8 py-8 space-y-8">
+      <div className="px-4 py-6 space-y-6 md:px-8 md:py-8 md:space-y-8">
         <div className="rounded-xl border bg-card p-5">
           <div className="flex items-baseline justify-between">
             <div><h2 className="font-display text-lg">Company & Period master</h2><p className="text-xs text-muted-foreground">Save the company and reporting period before uploading.</p></div>
@@ -121,7 +121,7 @@ export default function TrialBalancePage() {
               </div>
               {unmappedHeads.length > 0 && <ul className="mt-3 flex flex-wrap gap-2 text-xs">{unmappedHeads.map((h) => <li key={h} className="rounded-full border border-amber-500/40 bg-amber-500/10 px-3 py-1 text-amber-700">{h}</li>)}</ul>}
             </div>
-            <div className="rounded-xl border bg-card">
+            <div className="overflow-x-auto rounded-xl border bg-card">
               <header className="border-b px-6 py-4"><h2 className="font-display text-xl">Balances by Schedule Head</h2><p className="text-xs text-muted-foreground">Net = Closing Dr − Closing Cr.</p></header>
               <table className="w-full text-sm">
                 <thead><tr className="text-xs uppercase tracking-wider text-muted-foreground"><th className="px-6 py-3 text-left">Schedule Head</th><th className="px-3 py-3 text-left">Classification</th><th className="px-3 py-3 text-left">Category</th><th className="w-20 px-3 py-3 text-right">Ledgers</th><th className="w-44 px-6 py-3 text-right">Net</th></tr></thead>

@@ -146,7 +146,7 @@ export default function ReportPage() {
   return (
     <AppShell>
       <PageHeader eyebrow="Step 06" title="Generate Report" description="Comprehensive financial report with executive summary, P&L, balance sheet, ratio analysis and recommendations — ready to print or save as PDF." />
-      <div className="px-8 py-8 space-y-6">
+      <div className="px-4 py-6 space-y-4 md:px-8 md:py-8 md:space-y-6">
         <div className="rounded-xl border bg-card p-6">
           <div className="flex items-baseline justify-between">
             <div>
