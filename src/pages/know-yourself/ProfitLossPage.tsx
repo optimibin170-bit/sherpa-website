@@ -12,9 +12,9 @@ export default function ProfitLossPage() {
   const cyRows = useTrialBalance((s) => s.cy.rows);
   const pyRows = useTrialBalance((s) => s.py.rows);
   const master = useTrialBalance((s) => s.master);
-  const { closingStock, depreciation, accruals, ledgerAdj, cogs } = useAdjustments();
+  const { closingStock: stock, depreciation, accruals, ledgerAdj, cogs } = useAdjustments();
 
-  const np = useMemo(() => computeNetProfit({ cyRows, pyRows, closingStock, depreciation, accruals, ledgerAdj, cogs }), [cyRows, pyRows, closingStock, depreciation, accruals, ledgerAdj, cogs]);
+  const np = useMemo(() => computeNetProfit({ cyRows, pyRows, closingStock: stock, depreciation, accruals, ledgerAdj, cogs }), [cyRows, pyRows, stock, depreciation, accruals, ledgerAdj, cogs]);
 
   const depTotal = depreciation.reduce((s, d) => s + d.depreciation, 0);
   const prepaid = accruals.filter((a) => a.kind === "prepaid").reduce((s, a) => s + a.amount, 0);
