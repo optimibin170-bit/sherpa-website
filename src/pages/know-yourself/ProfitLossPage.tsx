@@ -1,88 +1,255 @@
 import { useMemo } from "react";
-import { AppShell, PageHeader } from "./AppShell";
-import { useTrialBalance } from "@/store/trialBalance";
-import { useAdjustments } from "@/store/adjustments";
-import { buildHierarchy, sumNodes } from "@/lib/hierarchy";
-import { computeNetProfit } from "@/lib/computeNetProfit";
-import { HierarchyStatement, type StatementSection } from "./HierarchyStatement";
+import { AppShell, PageHeader, PrintButton } from "./AppShell";
+import { HierarchyStatement } from "./HierarchyStatement";
+import { PendingBanner } from "./StatementShell";
 import { AnalysisPanel, type AnalysisSection } from "./AnalysisPanel";
-import { formatNPR } from "@/lib/format";
+import type { StatementSection, ExtraLine } from "./HierarchyStatement";
+import { useAdjustments, summarizeStock, sumLedgerAdjByScheduleHeads } from "@/store/adjustments";
+import { useTrialBalance } from "@/store/trialBalance";
+import { buildHierarchy, sumNodes } from "@/lib/hierarchy";
+import { tbScheduleTotals } from "@/lib/tbAggregate";
+import { findUnmappedRows } from "@/lib/unmapped";
+import { UnmappedLedgers } from "./UnmappedLedgers";
+import { computeNetProfit } from "@/lib/computeNetProfit";
 
-export default function ProfitLossPage() {
-  const cyRows = useTrialBalance((s) => s.cy.rows);
-  const pyRows = useTrialBalance((s) => s.py.rows);
-  const master = useTrialBalance((s) => s.master);
-  const { closingStock: stock, depreciation, accruals, ledgerAdj, cogs } = useAdjustments();
 
-  const np = useMemo(() => computeNetProfit({ cyRows, pyRows, closingStock: stock, depreciation, accruals, ledgerAdj, cogs }), [cyRows, pyRows, stock, depreciation, accruals, ledgerAdj, cogs]);
+function ProfitLossPage() {
+  const adj = useAdjustments();
+  const tb = useTrialBalance();
+  const hasTB = tb.cy.rows.length > 0;
+  const cyLabel = tb.master.cy.label !== "Current Year" ? tb.master.cy.label : "Current Year";
+  const pyLabel = tb.master.py.label !== "Prior Year" ? tb.master.py.label : "Prior Year";
 
-  const depTotal = depreciation.reduce((s, d) => s + d.depreciation, 0);
-  const prepaid = accruals.filter((a) => a.kind === "prepaid").reduce((s, a) => s + a.amount, 0);
-  const accrued = accruals.filter((a) => a.kind === "accrued").reduce((s, a) => s + a.amount, 0);
+  const stock = useMemo(() => summarizeStock(adj.closingStock), [adj.closingStock]);
+  const depTotal = adj.depreciation.reduce((s, d) => s + d.depreciation, 0);
+  const prepaid = adj.accruals.filter((a) => a.kind === "prepaid").reduce((s, a) => s + a.amount, 0);
+  const accrued = adj.accruals.filter((a) => a.kind === "accrued").reduce((s, a) => s + a.amount, 0);
+  const rmAdj = sumLedgerAdjByScheduleHeads(adj.ledgerAdj, ["Repair & Maintenance"]);
+  const intAdj = sumLedgerAdjByScheduleHeads(adj.ledgerAdj, [
+    "Bank Interest",
+    "Interest on Unsecured Loans",
+  ]);
 
-  const revenueNodes = useMemo(() => buildHierarchy({ cyRows, pyRows, filter: (i) => i.classification === "PL" && i.category === "Revenue from Operations", sign: -1 }), [cyRows, pyRows]);
-  const otherIncNodes = useMemo(() => buildHierarchy({ cyRows, pyRows, filter: (i) => i.classification === "PL" && i.category === "Other Income", sign: -1 }), [cyRows, pyRows]);
-  const cogsNodes = useMemo(() => buildHierarchy({ cyRows, pyRows, filter: (i) => i.classification === "PL" && (i.category2 === "Purchase" || i.category2 === "Direct Expenses"), sign: 1 }), [cyRows, pyRows]);
-  const empNodes = useMemo(() => buildHierarchy({ cyRows, pyRows, filter: (i) => i.classification === "PL" && i.category2 === "Employee Benefit Expense", sign: 1 }), [cyRows, pyRows]);
-  const finNodes = useMemo(() => buildHierarchy({ cyRows, pyRows, filter: (i) => i.classification === "PL" && i.category2 === "Finance Costs", sign: 1 }), [cyRows, pyRows]);
-  const depNodes = useMemo(() => buildHierarchy({ cyRows, pyRows, filter: (i) => i.classification === "PL" && i.category2 === "Depreciation and Amortization", sign: 1, excludeScheduleHeads: ["Depreciation & Amortisation"] }), [cyRows, pyRows]);
-  const sellNodes = useMemo(() => buildHierarchy({ cyRows, pyRows, filter: (i) => i.classification === "PL" && i.category2 === "Selling and Distribution Expenses", sign: 1 }), [cyRows, pyRows]);
-  const adminNodes = useMemo(() => buildHierarchy({ cyRows, pyRows, filter: (i) => i.classification === "PL" && i.category2 === "Administrative Expenses", sign: 1 }), [cyRows, pyRows]);
-  const otherExpNodes = useMemo(() => buildHierarchy({ cyRows, pyRows, filter: (i) => i.classification === "PL" && i.category2 === "Other Expenses", sign: 1 }), [cyRows, pyRows]);
-  const taxNodes = useMemo(() => buildHierarchy({ cyRows, pyRows, filter: (i) => i.classification === "PL" && i.category2 === "Tax Expense", sign: 1 }), [cyRows, pyRows]);
+  // Income tree (PL classification, Income parent, Cr-side → flip sign).
+  const incomeNodes = useMemo(
+    () =>
+      buildHierarchy({
+        cyRows: tb.cy.rows,
+        pyRows: tb.py.rows,
+        filter: (i) => i.classification === "PL" && /income|revenue/i.test(i.parent),
+        sign: -1,
+      }),
+    [tb.cy.rows, tb.py.rows],
+  );
+  const incSum = sumNodes(incomeNodes);
 
-  const rev = sumNodes(revenueNodes);
-  const oi = sumNodes(otherIncNodes);
-  const totalIncCy = rev.cy + oi.cy;
-  const totalIncPy = rev.py + oi.py;
-  const cogsS = sumNodes(cogsNodes);
-  const empS = sumNodes(empNodes);
-  const finS = sumNodes(finNodes);
-  const depS = sumNodes(depNodes);
-  const sellS = sumNodes(sellNodes);
-  const adminS = sumNodes(adminNodes);
-  const otherExpS = sumNodes(otherExpNodes);
-  const taxS = sumNodes(taxNodes);
+  // Expense tree (PL classification, anything not income).
+  // Depreciation & Amortization is excluded from TB — it only comes from Platform adjustments.
+  const expenseNodes = useMemo(
+    () =>
+      buildHierarchy({
+        cyRows: tb.cy.rows,
+        pyRows: tb.py.rows,
+        filter: (i) =>
+          i.classification === "PL" &&
+          !/income|revenue/i.test(i.parent) &&
+          !/deprecia|amorti/i.test(i.parent) &&
+          !/deprecia|amorti/i.test(i.category2),
+        sign: 1,
+      }),
+    [tb.cy.rows, tb.py.rows],
+  );
+  const expSum = sumNodes(expenseNodes);
 
-  const totalExpCy = cogsS.cy + empS.cy + finS.cy + depS.cy + sellS.cy + adminS.cy + otherExpS.cy - prepaid + accrued;
-  const totalExpPy = cogsS.py + empS.py + finS.py + depS.py + sellS.py + adminS.py + otherExpS.py;
+  // COGS bridge using closing stock & platform overrides.
+  const invCY = tbScheduleTotals(tb.cy.rows, ["Inventories"]);
+  const invPY = tbScheduleTotals(tb.py.rows, ["Inventories"]);
+  const openingInv = adj.cogs.openingInventory ?? Math.round(invCY.opening || invPY.closing || 0);
+  const purchCY = tbScheduleTotals(tb.cy.rows, ["Purchase of Goods"]);
+  const purchases = adj.cogs.purchases ?? Math.round(purchCY.additions - purchCY.credits || purchCY.closing);
 
-  const plSections: StatementSection[] = [
-    { header: "Revenue", nodes: revenueNodes, totalLabel: "Revenue from Operations", totalCy: rev.cy, totalPy: rev.py },
-    { header: "Other Income", nodes: otherIncNodes, totalLabel: "Other Income", totalCy: oi.cy, totalPy: oi.py },
-    { header: "Total Income", nodes: [], totalLabel: "", totalCy: totalIncCy, totalPy: totalIncPy },
-    { header: "Expenses", nodes: cogsNodes, extras: [{ label: "Closing inventory (Platform)", hint: "platform", cy: -stock.reduce((s, e) => s + (e.bucket === "good" ? e.value : 0), 0), py: 0, emphasis: "subtotal", indent: 1 }], totalLabel: "Cost of Goods Sold", totalCy: cogsS.cy - stock.reduce((s, e) => s + (e.bucket === "good" ? e.value : 0), 0), totalPy: cogsS.py },
-    { header: "", nodes: empNodes, totalLabel: "Employee Benefits", totalCy: empS.cy, totalPy: empS.py },
-    { header: "", nodes: finNodes, extras: [{ label: "Interest adjustment (Platform)", hint: "platform", cy: 0, py: 0, emphasis: "subtotal", indent: 1 }], totalLabel: "Finance Costs", totalCy: finS.cy, totalPy: finS.py },
-    { header: "", nodes: depNodes, extras: [{ label: "Platform depreciation", hint: "platform", cy: depTotal, py: 0, emphasis: "subtotal", indent: 1 }], totalLabel: "Depreciation & Amortisation", totalCy: depS.cy + depTotal, totalPy: depS.py },
-    { header: "", nodes: sellNodes, totalLabel: "Selling & Distribution", totalCy: sellS.cy, totalPy: sellS.py },
-    { header: "", nodes: adminNodes, extras: [{ label: "Repair & Maintenance adj.", hint: "platform", cy: 0, py: 0, emphasis: "subtotal", indent: 1 }], totalLabel: "Administrative Expenses", totalCy: adminS.cy, totalPy: adminS.py },
-    { header: "", nodes: otherExpNodes, totalLabel: "Other Expenses", totalCy: otherExpS.cy, totalPy: otherExpS.py },
-    { header: "Total Expenses", nodes: [], totalLabel: "", totalCy: totalExpCy, totalPy: totalExpPy },
-    { header: "Profit before tax", nodes: [], totalLabel: "", totalCy: np.pbtCy, totalPy: np.pbtPy },
-    { header: "", nodes: taxNodes, totalLabel: "Tax Expense", totalCy: taxS.cy, totalPy: taxS.py },
-    { header: "Net profit", nodes: [], totalLabel: "", totalCy: np.profitCy, totalPy: np.profitPy },
-  ];
+  const expenseExtras: ExtraLine[] = [];
+  let expenseOverlay = 0;
+  if (openingInv || purchases || stock.good) {
+    expenseExtras.push({ label: "COGS bridge — Opening inventory", hint: "P", cy: openingInv });
+    expenseExtras.push({ label: "COGS bridge — Less: Closing inventory (Good)", hint: "P", cy: -stock.good });
+    expenseOverlay += openingInv - stock.good;
+  }
+  if (stock.expiry) {
+    expenseExtras.push({ label: "Inventory written off — expiry", hint: "P", cy: stock.expiry });
+    expenseOverlay += stock.expiry;
+  }
+  if (stock.defect) {
+    expenseExtras.push({ label: "Inventory written off — defect", hint: "P", cy: stock.defect });
+    expenseOverlay += stock.defect;
+  }
+  if (depTotal) {
+    expenseExtras.push({ label: "Depreciation & amortisation", hint: "P", cy: depTotal });
+    expenseOverlay += depTotal;
+  }
+  if (rmAdj) {
+    expenseExtras.push({ label: "Repair & Maintenance adjustments", hint: "P", cy: rmAdj });
+    expenseOverlay += rmAdj;
+  }
+  if (intAdj) {
+    expenseExtras.push({ label: "Finance cost adjustments", hint: "P", cy: intAdj });
+    expenseOverlay += intAdj;
+  }
+  if (prepaid) {
+    expenseExtras.push({ label: "Less: Prepaid expenses (deferred)", hint: "P", cy: -prepaid });
+    expenseOverlay -= prepaid;
+  }
+  if (accrued) {
+    expenseExtras.push({ label: "Add: Accrued expenses (recognised)", hint: "P", cy: accrued });
+    expenseOverlay += accrued;
+  }
 
-  const plAnalysis: AnalysisSection[] = [
-    { header: "Income", rows: [{ label: "Revenue", cy: rev.cy, py: rev.py, emphasis: "subtotal" }, { label: "Other income", cy: oi.cy, py: oi.py, emphasis: "subtotal" }, { label: "Total income", cy: totalIncCy, py: totalIncPy, emphasis: "total" }] },
-    { header: "Expenses", rows: [{ label: "COGS", cy: cogsS.cy - stock.reduce((s, e) => s + (e.bucket === "good" ? e.value : 0), 0), py: cogsS.py }, { label: "Employee benefits", cy: empS.cy, py: empS.py }, { label: "Finance costs", cy: finS.cy, py: finS.py }, { label: "Depreciation", cy: depS.cy + depTotal, py: depS.py }, { label: "Selling & distribution", cy: sellS.cy, py: sellS.py }, { label: "Administrative", cy: adminS.cy, py: adminS.py }, { label: "Other expenses", cy: otherExpS.cy, py: otherExpS.py }, { label: "Total expenses", cy: totalExpCy, py: totalExpPy, emphasis: "total" }] },
-    { header: "Bottom line", rows: [{ label: "Profit before tax", cy: np.pbtCy, py: np.pbtPy, emphasis: "subtotal" }, { label: "Tax expense", cy: taxS.cy, py: taxS.py }, { label: "Net profit", cy: np.profitCy, py: np.profitPy, emphasis: "total" }] },
-  ];
+  const incomeSection: StatementSection = {
+    header: "Income",
+    nodes: incomeNodes,
+    totalLabel: "Total income",
+    totalCy: incSum.cy,
+    totalPy: incSum.py,
+    defaultOpenDepth: 1,
+  };
+  const expenseSection: StatementSection = {
+    header: "Expenses",
+    nodes: expenseNodes,
+    extras: expenseExtras,
+    totalLabel: "Total expenses",
+    totalCy: expSum.cy + expenseOverlay,
+    totalPy: expSum.py,
+    defaultOpenDepth: 1,
+  };
+
+  const np = useMemo(
+    () =>
+      computeNetProfit({
+        cyRows: tb.cy.rows,
+        pyRows: tb.py.rows,
+        closingStock: adj.closingStock,
+        depreciation: adj.depreciation,
+        accruals: adj.accruals,
+        ledgerAdj: adj.ledgerAdj,
+        cogs: adj.cogs,
+      }),
+    [tb.cy.rows, tb.py.rows, adj.closingStock, adj.depreciation, adj.accruals, adj.ledgerAdj, adj.cogs],
+  );
+
+  const profitSection: StatementSection = {
+    header: "Result for the year",
+    nodes: [],
+    extras: [
+      { label: "Profit before tax", emphasis: "subtotal", cy: np.pbtCy, py: np.pbtPy },
+      { label: "Less: Tax expense", cy: np.taxCy, py: np.taxPy },
+    ],
+    totalLabel: "Profit for the year",
+    totalCy: np.profitCy,
+    totalPy: np.profitPy,
+  };
+
+  const unmapped = useMemo(
+    () => findUnmappedRows(tb.cy.rows, tb.py.rows),
+    [tb.cy.rows, tb.py.rows],
+  );
 
   return (
     <AppShell>
-      <PageHeader eyebrow="Step 04" title="Profit & Loss" subtitle="Statement of Profit or Loss" description="Comparative NFRS P&L with revenue, COGS, operating expenses, finance costs, depreciation and tax — with drill-down to ledger level." />
-      <div className="px-4 py-6 space-y-4 md:px-8 md:py-8 md:space-y-6">
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-          <div className="rounded-lg border bg-card p-4"><div className="text-xs uppercase tracking-wider text-muted-foreground">Revenue</div><div className="mt-1 font-display text-xl tabular-nums">{formatNPR(rev.cy, { showZero: true })}</div></div>
-          <div className="rounded-lg border bg-card p-4"><div className="text-xs uppercase tracking-wider text-muted-foreground">Net Profit</div><div className="mt-1 font-display text-xl tabular-nums">{formatNPR(np.profitCy, { showZero: true })}</div></div>
-          <div className="rounded-lg border bg-card p-4"><div className="text-xs uppercase tracking-wider text-muted-foreground">Net Margin</div><div className="mt-1 font-display text-xl tabular-nums">{rev.cy ? ((np.profitCy / rev.cy) * 100).toFixed(1) + "%" : "—"}</div></div>
-          <div className="rounded-lg border bg-card p-4"><div className="text-xs uppercase tracking-wider text-muted-foreground">Expenses</div><div className="mt-1 font-display text-xl tabular-nums">{formatNPR(totalExpCy, { showZero: true })}</div></div>
-        </div>
-        <HierarchyStatement title="Statement of Profit or Loss" subtitle="Comparative income statement with opening, current and prior year values" opLabel="Opening" cyLabel={master.cy.label} pyLabel={master.py.label} sections={plSections} />
-        <AnalysisPanel title="Vertical & Horizontal Analysis" subtitle="Structure and year-on-year movement" cyLabel={master.cy.label} pyLabel={master.py.label} sections={plAnalysis} />
+      <PageHeader
+        eyebrow="Statement"
+        title="Profit & Loss"
+        description={"Comparative Statement of Profit or Loss. Drill from Classification down to individual ledger accounts. Lines tagged \u201cP\u201d come from Platform adjustments."}
+        actions={<PrintButton />}
+      />
+      <div className="px-8 py-8">
+        {!hasTB && (
+          <PendingBanner>
+            Awaiting Trial Balance — income and expense ledgers will populate from the TB
+            mapping. Platform adjustments (depreciation, stock, accruals) already appear.
+          </PendingBanner>
+        )}
+        <HierarchyStatement
+          title="Statement of Profit or Loss"
+          subtitle="Prepared under NFRS · all amounts in NPR · click any row to drill deeper"
+          cyLabel={cyLabel}
+          pyLabel={pyLabel}
+          sections={[incomeSection, expenseSection, profitSection]}
+        />
+        <PLAnalysis
+          incomeSection={incomeSection}
+          expenseSection={expenseSection}
+          incomeNodes={incomeNodes}
+          expenseNodes={expenseNodes}
+          np={np}
+          cyLabel={cyLabel}
+          pyLabel={pyLabel}
+        />
+        <UnmappedLedgers rows={unmapped} cyLabel={cyLabel} pyLabel={pyLabel} />
       </div>
     </AppShell>
   );
 }
+
+function PLAnalysis({
+  incomeSection,
+  expenseSection,
+  incomeNodes,
+  expenseNodes,
+  np,
+  cyLabel,
+  pyLabel,
+}: {
+  incomeSection: StatementSection;
+  expenseSection: StatementSection;
+  incomeNodes: ReturnType<typeof buildHierarchy>;
+  expenseNodes: ReturnType<typeof buildHierarchy>;
+  np: ReturnType<typeof computeNetProfit>;
+  cyLabel: string;
+  pyLabel: string;
+}) {
+  const revenueCy = incomeSection.totalCy;
+  const revenuePy = incomeSection.totalPy;
+
+  const sections: AnalysisSection[] = [
+    {
+      header: "Income (% of Total Income)",
+      base: { cy: revenueCy, py: revenuePy },
+      rows: [
+        ...incomeNodes.map((n) => ({ label: n.label, cy: n.cy, py: n.py })),
+        { label: incomeSection.totalLabel, cy: revenueCy, py: revenuePy, emphasis: "total" as const },
+      ],
+    },
+    {
+      header: "Expenses (% of Total Income)",
+      base: { cy: revenueCy, py: revenuePy },
+      rows: [
+        ...expenseNodes.map((n) => ({ label: n.label, cy: n.cy, py: n.py })),
+        ...(expenseSection.extras ?? [])
+          .filter((e) => e.emphasis !== "subtotal")
+          .map((e) => ({ label: e.label, cy: e.cy ?? 0, py: e.py ?? 0 })),
+        { label: expenseSection.totalLabel, cy: expenseSection.totalCy, py: expenseSection.totalPy, emphasis: "total" as const },
+      ],
+    },
+    {
+      header: "Result (% of Total Income)",
+      base: { cy: revenueCy, py: revenuePy },
+      rows: [
+        { label: "Profit before tax", cy: np.pbtCy, py: np.pbtPy, emphasis: "subtotal" as const },
+        { label: "Tax expense", cy: np.taxCy, py: np.taxPy },
+        { label: "Profit for the year", cy: np.profitCy, py: np.profitPy, emphasis: "total" as const },
+      ],
+    },
+  ];
+
+  return (
+    <AnalysisPanel
+      title="Vertical & Horizontal Analysis"
+      subtitle="Each line shown as a percentage of total income (common-size) along with year-on-year movement."
+      cyLabel={cyLabel}
+      pyLabel={pyLabel}
+      sections={sections}
+    />
+  );
+}
+
+export default ProfitLossPage;

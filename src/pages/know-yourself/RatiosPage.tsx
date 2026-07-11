@@ -1,107 +1,288 @@
 import { useMemo, useState } from "react";
-import { AppShell, PageHeader } from "./AppShell";
-import { useTrialBalance } from "@/store/trialBalance";
+import { AppShell, PageHeader, PrintButton } from "./AppShell";
+import { PendingBanner } from "./StatementShell";
 import { useAdjustments } from "@/store/adjustments";
-import { computeRatioAggregates, RATIOS, formatRatio, deltaPct, type RatioDef, type RatioCategory } from "@/lib/ratios";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { useTrialBalance } from "@/store/trialBalance";
+import { computeRatioAggregates, RATIOS, formatRatio, deltaPct, type RatioCategory, type RatioDef, type RatioAggregates } from "@/lib/ratios";
+import { formatNPR } from "@/lib/format";
+import { tbScheduleTotals } from "@/lib/tbAggregate";
+import { computeNetProfit } from "@/lib/computeNetProfit";
+import { ChevronDown, ChevronRight } from "lucide-react";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
-const CATEGORIES: RatioCategory[] = ["Profitability", "Liquidity", "Leverage", "Solvency", "Efficiency"];
 
-export default function RatiosPage() {
-  const cyRows = useTrialBalance((s) => s.cy.rows);
-  const pyRows = useTrialBalance((s) => s.py.rows);
-  const master = useTrialBalance((s) => s.master);
-  const { closingStock, depreciation, accruals, ledgerAdj, cogs, equity } = useAdjustments();
-  const [selected, setSelected] = useState<RatioDef>(RATIOS[0]);
+const CATEGORIES: { key: RatioCategory; blurb: string }[] = [
+  {
+    key: "Profitability",
+    blurb:
+      "How efficiently the business converts sales, assets and equity into profit. Strong profitability ratios indicate pricing power and operational efficiency.",
+  },
+  {
+    key: "Liquidity",
+    blurb:
+      "Ability to meet short-term obligations from current assets. Healthy liquidity ratios show that the operating cycle is not stretched.",
+  },
+  {
+    key: "Leverage",
+    blurb:
+      "Capital-structure intensity — how much of the asset base is financed by debt rather than equity. Higher leverage amplifies both returns and risk.",
+  },
+  {
+    key: "Solvency",
+    blurb:
+      "Long-run ability to service debt and stay solvent. Solvency ratios extend the leverage view to include earnings coverage of finance costs.",
+  },
+  {
+    key: "Efficiency",
+    blurb:
+      "Working-capital efficiency — how fast inventory turns into sales, sales into cash and how long suppliers fund the operating cycle. Includes DSO, DIO, DPO, the Operating Cycle and the Cash Conversion Cycle.",
+  },
+];
 
-  const agg = useMemo(() => {
-    if (!cyRows.length) return null;
-    return computeRatioAggregates({ cyRows, pyRows, closingStock, depreciation, accruals, ledgerAdj, cogs, scOpening: equity.shareCapital.opening ?? undefined, scClosing: equity.shareCapital.closing ?? undefined, reOpening: equity.retainedEarnings.opening ?? undefined, reClosing: equity.retainedEarnings.opening != null ? equity.retainedEarnings.opening + equity.retainedEarnings.adjustments : undefined });
-  }, [cyRows, pyRows, closingStock, depreciation, accruals, ledgerAdj, cogs, equity]);
+function RatiosPage() {
+  const adj = useAdjustments();
+  const tb = useTrialBalance();
+  const hasTB = tb.cy.rows.length > 0;
 
-  if (!agg) {
-    return (
-      <AppShell>
-        <PageHeader eyebrow="Step 05" title="Ratio Analysis" description="21 financial ratios across profitability, liquidity, leverage, solvency and efficiency — computed from your Trial Balance and Platform adjustments." />
-        <div className="px-8 py-8">
-          <div className="rounded-lg border border-dashed bg-card p-10 text-center">
-            <div className="font-display text-xl">No data to compute ratios</div>
-            <p className="mx-auto mt-3 max-w-md text-sm text-muted-foreground">Upload your Trial Balance first to see ratio analysis.</p>
-          </div>
-        </div>
-      </AppShell>
-    );
-  }
+  const np = useMemo(
+    () =>
+      computeNetProfit({
+        cyRows: tb.cy.rows,
+        pyRows: tb.py.rows,
+        closingStock: adj.closingStock,
+        depreciation: adj.depreciation,
+        accruals: adj.accruals,
+        ledgerAdj: adj.ledgerAdj,
+        cogs: adj.cogs,
+      }),
+    [tb.cy.rows, tb.py.rows, adj],
+  );
 
-  const result = selected.compute(agg.cy);
-  const numLines = selected.numeratorLines(agg.cy);
-  const denLines = selected.denominatorLines(agg.cy);
-  const pyResult = selected.compute(agg.py);
-  const change = deltaPct(result.value, pyResult.value);
+  const scOpenSeed = Math.round(-tbScheduleTotals(tb.py.rows, ["Share Capital"]).closing);
+  const scCloseSeed = Math.round(-tbScheduleTotals(tb.cy.rows, ["Share Capital"]).closing);
+  const reOpenSeed = Math.round(-tbScheduleTotals(tb.py.rows, ["Other Equity"]).closing);
+  const scOpening = adj.equity.shareCapital.opening ?? scOpenSeed;
+  const scClosing = adj.equity.shareCapital.closing ?? scCloseSeed;
+  const reOpening = adj.equity.retainedEarnings.opening ?? reOpenSeed;
+  const reClosing = reOpening + np.profitCy + (adj.equity.retainedEarnings.adjustments ?? 0);
+
+  const bundle = useMemo(
+    () =>
+      computeRatioAggregates({
+        cyRows: tb.cy.rows,
+        pyRows: tb.py.rows,
+        closingStock: adj.closingStock,
+        depreciation: adj.depreciation,
+        accruals: adj.accruals,
+        ledgerAdj: adj.ledgerAdj,
+        cogs: adj.cogs,
+        scOpening,
+        scClosing,
+        reOpening,
+        reClosing,
+      }),
+    [tb.cy.rows, tb.py.rows, adj, scOpening, scClosing, reOpening, reClosing],
+  );
 
   return (
     <AppShell>
-      <PageHeader eyebrow="Step 05" title="Ratio Analysis" description="21 financial ratios across profitability, liquidity, leverage, solvency and efficiency — computed from your Trial Balance and Platform adjustments." />
-      <div className="px-4 py-6 space-y-4 md:px-8 md:py-8 md:space-y-6">
-        <Tabs defaultValue="Profitability">
-          <TabsList className="grid w-full grid-cols-5">
-            {CATEGORIES.map((c) => <TabsTrigger key={c} value={c}>{c}</TabsTrigger>)}
-          </TabsList>
-          {CATEGORIES.map((c) => (
-            <TabsContent key={c} value={c}>
-              <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-                {RATIOS.filter((r) => r.category === c).map((r) => {
-                  const val = r.compute(agg.cy).value;
-                  return (
-                    <button key={r.key} type="button" onClick={() => setSelected(r)} className={`rounded-lg border p-4 text-left transition hover:border-primary/30 hover:shadow-sm ${selected.key === r.key ? "border-primary bg-primary/5" : "bg-card"}`}>
-                      <div className="text-xs uppercase tracking-wider text-muted-foreground">{r.name}</div>
-                      <div className="mt-2 font-display text-2xl tabular-nums">{formatRatio(val, r.unit)}</div>
-                    </button>
-                  );
-                })}
-              </div>
-            </TabsContent>
-          ))}
-        </Tabs>
-
-        <div className="grid gap-6 lg:grid-cols-3">
-          <div className="lg:col-span-2 rounded-xl border bg-card p-6">
-            <div className="flex items-baseline justify-between">
-              <div><h2 className="font-display text-xl">{selected.name}</h2><p className="mt-1 text-sm text-muted-foreground">{selected.definition}</p></div>
-              <div className="text-right"><div className="font-display text-3xl tabular-nums">{formatRatio(result.value, selected.unit)}</div>
-                {isFinite(change) && <div className={`mt-1 text-sm ${change > 0 ? "text-emerald-600" : change < 0 ? "text-rose-600" : ""}`}>{change > 0 ? "+" : ""}{change.toFixed(1)}% vs PY</div>}
-              </div>
-            </div>
-            <div className="mt-4 rounded-lg bg-muted/40 p-3 text-xs text-muted-foreground"><span className="font-medium text-foreground/80">Formula: </span>{selected.formulaText}</div>
-            <div className="mt-4 rounded-lg bg-muted/40 p-3 text-xs text-muted-foreground"><span className="font-medium text-foreground/80">Interpretation: </span>{selected.interpretation}</div>
-            <div className="mt-6 grid gap-4 md:grid-cols-2">
-              <div><div className="mb-2 text-xs uppercase tracking-wider text-muted-foreground">Numerator breakdown</div><div className="rounded-lg border bg-card p-3">
-                {numLines.map((l, i) => <div key={i} className="flex justify-between py-1 text-sm"><span className="text-muted-foreground">{l.label}</span><span className="tabular-nums">{formatRatio(l.value, selected.unit === "percent" ? "percent" : "times")}</span></div>)}
-              </div></div>
-              <div><div className="mb-2 text-xs uppercase tracking-wider text-muted-foreground">Denominator breakdown</div><div className="rounded-lg border bg-card p-3">
-                {denLines.map((l, i) => <div key={i} className="flex justify-between py-1 text-sm"><span className="text-muted-foreground">{l.label}</span><span className="tabular-nums">{formatRatio(l.value, selected.unit === "percent" ? "percent" : "times")}</span></div>)}
-              </div></div>
-            </div>
-          </div>
-
-          <div className="rounded-xl border bg-card p-6">
-            <h3 className="mb-4 font-display text-lg">All ratios</h3>
-            <div className="space-y-2">
-              {RATIOS.map((r) => {
-                const val = r.compute(agg.cy).value;
-                const pyVal = r.compute(agg.py).value;
-                const d = deltaPct(val, pyVal);
-                return (
-                  <button key={r.key} type="button" onClick={() => setSelected(r)} className={`flex w-full items-center justify-between rounded-md px-3 py-2 text-left text-sm transition hover:bg-muted ${selected.key === r.key ? "bg-primary/5" : ""}`}>
-                    <span className="truncate text-muted-foreground">{r.name}</span>
-                    <span className="ml-2 shrink-0 tabular-nums">{formatRatio(val, r.unit)}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </div>
+      <PageHeader
+        eyebrow="Analysis"
+        title="Ratio Analysis"
+        description="Profitability, liquidity, leverage and solvency ratios. Each metric includes a definition, its formula, computed values for CY and PY, and a deep-dive into the numbers behind the ratio."
+        actions={<PrintButton />}
+      />
+      <div className="space-y-10 px-8 py-8">
+        {!hasTB && (
+          <PendingBanner>
+            Trial Balance not uploaded yet — ratios will populate once the year-end TB is loaded.
+          </PendingBanner>
+        )}
+        {CATEGORIES.map(({ key, blurb }) => (
+          <CategoryBlock key={key} category={key} blurb={blurb} bundle={bundle} />
+        ))}
       </div>
     </AppShell>
   );
 }
+
+function CategoryBlock({
+  category,
+  blurb,
+  bundle,
+}: {
+  category: RatioCategory;
+  blurb: string;
+  bundle: { cy: RatioAggregates; py: RatioAggregates };
+}) {
+  const list = RATIOS.filter((r) => r.category === category);
+  return (
+    <section>
+      <div className="mb-4">
+        <div className="text-xs font-medium uppercase tracking-[0.18em] text-accent">{category} Ratios</div>
+        <p className="mt-1 max-w-3xl text-sm text-muted-foreground">{blurb}</p>
+      </div>
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+        {list.map((r) => (
+          <RatioCard key={r.key} def={r} cy={bundle.cy} py={bundle.py} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function RatioCard({ def, cy, py }: { def: RatioDef; cy: RatioAggregates; py: RatioAggregates }) {
+  const [open, setOpen] = useState(false);
+  const [deepOpen, setDeepOpen] = useState(false);
+  const cyR = def.compute(cy);
+  const pyR = def.compute(py);
+  const change = deltaPct(cyR.value, pyR.value);
+  return (
+    <Collapsible open={open} onOpenChange={setOpen}>
+      <article className="rounded-xl border bg-card">
+        <CollapsibleTrigger asChild>
+          <header className="group cursor-pointer border-b px-5 py-4 hover:bg-muted/30">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <h3 className="font-display text-lg">{def.name}</h3>
+                <p className="mt-1 font-mono text-xs text-muted-foreground">{def.formulaText}</p>
+              </div>
+              <div className="flex items-start gap-3">
+                <div className="text-right">
+                  <div className="font-display text-2xl">{formatRatio(cyR.value, def.unit)}</div>
+                  <div className="mt-0.5 text-[11px] text-muted-foreground">
+                    PY {formatRatio(pyR.value, def.unit)}
+                  </div>
+                  {isFinite(change) && (
+                    <div
+                      className={
+                        "mt-1 inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium " +
+                        (change >= 0
+                          ? "bg-emerald-500/10 text-emerald-600"
+                          : "bg-rose-500/10 text-rose-600")
+                      }
+                    >
+                      {change >= 0 ? "▲" : "▼"} {Math.abs(change).toFixed(1)}% YoY
+                    </div>
+                  )}
+                </div>
+                <ChevronDown
+                  className="mt-1 h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200 group-data-[state=open]:rotate-180"
+                />
+              </div>
+            </div>
+          </header>
+        </CollapsibleTrigger>
+        <CollapsibleContent>
+          <div className="px-5 py-4 space-y-3 text-sm">
+            <div>
+              <div className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">Definition</div>
+              <p className="mt-1 leading-relaxed">{def.definition}</p>
+            </div>
+            <div>
+              <div className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">Interpretation</div>
+              <p className="mt-1 leading-relaxed text-muted-foreground">{def.interpretation}</p>
+            </div>
+            <button
+              onClick={() => setDeepOpen((v) => !v)}
+              className="inline-flex items-center gap-1 rounded-md border bg-surface-raised px-2.5 py-1 text-xs font-medium hover:bg-muted/50"
+            >
+              <ChevronRight className={"h-3.5 w-3.5 transition-transform " + (deepOpen ? "rotate-90" : "")} />
+              {deepOpen ? "Hide deep dive" : "Deep dive"}
+            </button>
+            {deepOpen && (
+              <div className="rounded-lg border bg-muted/30 p-4">
+                <DeepDive def={def} cy={cy} py={py} cyR={cyR} pyR={pyR} />
+              </div>
+            )}
+          </div>
+        </CollapsibleContent>
+      </article>
+    </Collapsible>
+  );
+}
+
+function DeepDive({
+  def,
+  cy,
+  py,
+  cyR,
+  pyR,
+}: {
+  def: RatioDef;
+  cy: RatioAggregates;
+  py: RatioAggregates;
+  cyR: { numerator: number; denominator: number; value: number };
+  pyR: { numerator: number; denominator: number; value: number };
+}) {
+  const numCy = def.numeratorLines(cy);
+  const numPy = def.numeratorLines(py);
+  const denCy = def.denominatorLines(cy);
+  const denPy = def.denominatorLines(py);
+
+  return (
+    <div className="space-y-4">
+      <Block title="Numerator" cyLines={numCy} pyLines={numPy} cyTotal={cyR.numerator} pyTotal={pyR.numerator} />
+      <Block title="Denominator" cyLines={denCy} pyLines={denPy} cyTotal={cyR.denominator} pyTotal={pyR.denominator} />
+      <div className="rounded-md border bg-card px-3 py-2 text-xs">
+        <div className="flex items-center justify-between">
+          <span className="text-muted-foreground">Computed value</span>
+          <span className="font-display text-sm">
+            {formatRatio(cyR.value, def.unit)}{" "}
+            <span className="text-muted-foreground">(PY {formatRatio(pyR.value, def.unit)})</span>
+          </span>
+        </div>
+        <div className="mt-1 font-mono text-[11px] text-muted-foreground">
+          = {formatNPR(cyR.numerator)} / {formatNPR(cyR.denominator)}
+          {def.unit === "percent" ? " x 100" : ""}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Block({
+  title,
+  cyLines,
+  pyLines,
+  cyTotal,
+  pyTotal,
+}: {
+  title: string;
+  cyLines: Array<{ label: string; value: number }>;
+  pyLines: Array<{ label: string; value: number }>;
+  cyTotal: number;
+  pyTotal: number;
+}) {
+  const labels = cyLines.map((l) => l.label);
+  return (
+    <div>
+      <div className="mb-1 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">{title}</div>
+      <table className="w-full text-xs">
+        <thead>
+          <tr className="text-[10px] uppercase tracking-wider text-muted-foreground">
+            <th className="py-1 text-left">Component</th>
+            <th className="w-28 py-1 text-right">CY</th>
+            <th className="w-28 py-1 text-right">PY</th>
+          </tr>
+        </thead>
+        <tbody>
+          {labels.map((label, i) => (
+            <tr key={i} className="border-t border-rule/40">
+              <td className="py-1">{label}</td>
+              <td className="py-1 text-right tabular">{formatNPR(cyLines[i]?.value ?? 0)}</td>
+              <td className="py-1 text-right tabular text-muted-foreground">{formatNPR(pyLines[i]?.value ?? 0)}</td>
+            </tr>
+          ))}
+          <tr className="border-t border-rule/60 font-medium">
+            <td className="py-1">Total</td>
+            <td className="py-1 text-right tabular">{formatNPR(cyTotal)}</td>
+            <td className="py-1 text-right tabular text-muted-foreground">{formatNPR(pyTotal)}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+export default RatiosPage;
