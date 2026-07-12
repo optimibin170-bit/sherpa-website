@@ -10,6 +10,7 @@ import ResourceDetail from "./pages/ResourceDetail.tsx";
 import ServiceDetail from "./pages/ServiceDetail.tsx";
 import TaxCalculator from "./pages/TaxCalculator.tsx";
 import EmiCalculator from "./pages/EmiCalculator.tsx";
+import CustomAppDevelopment from "./pages/CustomAppDevelopment.tsx";
 import KnowYourselfLanding from "./pages/know-yourself/KnowYourselfLanding";
 import COAPage from "./pages/know-yourself/COAPage";
 import TrialBalancePage from "./pages/know-yourself/TrialBalancePage";
@@ -43,6 +44,7 @@ const App = () => (
           <Route path="/know-yourself/cash-flow" element={<CashFlowPage />} />
           <Route path="/know-yourself/ratios" element={<RatiosPage />} />
           <Route path="/know-yourself/report" element={<ReportPage />} />
+          <Route path="/custom-app-development" element={<CustomAppDevelopment />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
