@@ -35,11 +35,25 @@ const ResourceDetail = () => {
           <article className="rounded-3xl border border-primary/15 bg-card/72 p-7 shadow-elevated backdrop-blur">
             <h2 className="text-2xl font-bold text-summit">What opens here</h2>
             <div className="mt-5 grid gap-3">
-              {resource.sections.map((section) => (
-                <div key={section} className="flex items-start gap-3 font-bold leading-7 text-ink-soft">
-                  <CheckCircle2 className="mt-1 h-5 w-5 shrink-0 text-ridge" /> {section}
-                </div>
-              ))}
+              {resource.sections.map((section) => {
+                const href =
+                  section === "EMI Calculator"
+                    ? "/emi-calculator"
+                    : section === "SSF Salary Break Up and Tax Calculator"
+                      ? "/tax-calculator"
+                      : section === "Finance close and reporting templates"
+                        ? "/know-yourself"
+                        : undefined;
+                return href ? (
+                  <Link key={section} to={href} className="flex items-start gap-3 font-bold leading-7 text-ink-soft hover:text-primary transition-colors">
+                    <CheckCircle2 className="mt-1 h-5 w-5 shrink-0 text-ridge" /> {section}
+                  </Link>
+                ) : (
+                  <div key={section} className="flex items-start gap-3 font-bold leading-7 text-ink-soft">
+                    <CheckCircle2 className="mt-1 h-5 w-5 shrink-0 text-ridge" /> {section}
+                  </div>
+                );
+              })}
             </div>
           </article>
           <article className="rounded-3xl border border-primary/15 bg-card/72 p-7 shadow-elevated backdrop-blur">
