@@ -50,7 +50,43 @@
   ],
   "rewrites": [
     {
-      "source": "/((?!assets/|.*\\.pdf$|.*\\.png$|.*\\.jpg$|.*\\.svg$|.*\\.ico$|.*\\.webmanifest$|robots\\.txt|sitemap\\.xml).*)",
+      "source": "/services/:slug",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/resources/:slug",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/tax-calculator",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/emi-calculator",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/know-yourself",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/know-yourself/:path",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/custom-app-development",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/workflow-automation",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/website-portal-systems",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/institutional-memory-playbook",
       "destination": "/index.html"
     }
   ]
