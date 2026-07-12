@@ -43,11 +43,19 @@ const ResourceDetail = () => {
                       ? "/tax-calculator"
                       : section === "Finstate · Financial Analysis"
                         ? "/know-yourself"
-                        : undefined;
+                        : section === "Founder notes on scaling support teams"
+                          ? "/founder-notes-scaling-support-teams.md"
+                          : undefined;
                 return href ? (
-                  <Link key={section} to={href} className="flex items-start gap-3 font-bold leading-7 text-ink-soft hover:text-primary transition-colors">
-                    <CheckCircle2 className="mt-1 h-5 w-5 shrink-0 text-ridge" /> {section}
-                  </Link>
+                  href.endsWith(".md") ? (
+                    <a key={section} href={href} target="_blank" rel="noopener noreferrer" className="flex items-start gap-3 font-bold leading-7 text-ink-soft hover:text-primary transition-colors">
+                      <CheckCircle2 className="mt-1 h-5 w-5 shrink-0 text-ridge" /> {section}
+                    </a>
+                  ) : (
+                    <Link key={section} to={href} className="flex items-start gap-3 font-bold leading-7 text-ink-soft hover:text-primary transition-colors">
+                      <CheckCircle2 className="mt-1 h-5 w-5 shrink-0 text-ridge" /> {section}
+                    </Link>
+                  )
                 ) : (
                   <div key={section} className="flex items-start gap-3 font-bold leading-7 text-ink-soft">
                     <CheckCircle2 className="mt-1 h-5 w-5 shrink-0 text-ridge" /> {section}
