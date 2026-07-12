@@ -47,7 +47,7 @@ const ResourceDetail = () => {
                           ? "/founder-notes-scaling-support-teams.pdf"
                           : undefined;
                 return href ? (
-                  href.endsWith(".md") ? (
+                  href.endsWith(".md") || href.endsWith(".pdf") ? (
                     <a key={section} href={href} target="_blank" rel="noopener noreferrer" className="flex items-start gap-3 font-bold leading-7 text-ink-soft hover:text-primary transition-colors">
                       <CheckCircle2 className="mt-1 h-5 w-5 shrink-0 text-ridge" /> {section}
                     </a>
