@@ -47,7 +47,9 @@ const ResourceDetail = () => {
                           ? "/founder-notes-scaling-support-teams.pdf"
                           : section === "Operations lessons from cross-border delivery"
                             ? "/operations-lessons-cross-border-delivery.pdf"
-                            : undefined;
+                            : section === "Finance and compliance explainers for growing businesses"
+                              ? "/Founder_Notes_Field_Guide.pdf"
+                              : undefined;
                 return href ? (
                   href.endsWith(".md") || href.endsWith(".pdf") ? (
                     <a key={section} href={href} target="_blank" rel="noopener noreferrer" className="flex items-start gap-3 font-bold leading-7 text-ink-soft hover:text-primary transition-colors">
