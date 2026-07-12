@@ -178,10 +178,8 @@ const Index = () => {
               <button className="inline-flex items-center gap-1.5 hover:text-primary transition-colors duration-300">Know Yourself <ChevronDown className="h-3.5 w-3.5 transition-transform duration-300 group-hover:rotate-180" /></button>
               <div className="invisible absolute left-1/2 top-full z-50 w-[280px] -translate-x-1/2 rounded-lg border border-primary/15 glass-card p-3 opacity-0 shadow-elevated transition-all duration-300 group-hover:visible group-hover:opacity-100">
                 <a href="/know-yourself" className="block rounded-md px-3 py-2.5 text-[13.5px] text-ink-soft transition-all duration-200 hover:bg-primary/5 hover:text-primary">Finstate · Financial Analysis</a>
-                <a href="/tax-calculator" className="block rounded-md px-3 py-2.5 text-[13.5px] text-ink-soft transition-all duration-200 hover:bg-primary/5 hover:text-primary">SSA Tax Calculator</a>
                 <a href="/emi-calculator" className="block rounded-md px-3 py-2.5 text-[13.5px] text-ink-soft transition-all duration-200 hover:bg-primary/5 hover:text-primary">EMI Calculator</a>
-                <a href="/tax-calculator" className="block rounded-md px-3 py-2.5 text-[13.5px] text-ink-soft transition-all duration-200 hover:bg-primary/5 hover:text-primary">SSF Salary Break Up</a>
-                <a href="/know-yourself" className="block rounded-md px-3 py-2.5 text-[13.5px] text-ink-soft transition-all duration-200 hover:bg-primary/5 hover:text-primary">Finstate · Financial Analysis</a>
+                <a href="/tax-calculator" className="block rounded-md px-3 py-2.5 text-[13.5px] text-ink-soft transition-all duration-200 hover:bg-primary/5 hover:text-primary">SSF Salary Break Up and Tax Calculator</a>
               </div>
             </div>
           </div>
@@ -219,10 +217,8 @@ const Index = () => {
                     <div className="mt-6 space-y-1">
                       <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">Tools</p>
                       <SheetClose asChild><a href="/know-yourself" className="block rounded-md px-3 py-2.5 text-[14px] text-ink-soft transition-all duration-200 hover:bg-primary/5 hover:text-primary">Finstate · Financial Analysis</a></SheetClose>
-                      <SheetClose asChild><a href="/tax-calculator" className="block rounded-md px-3 py-2.5 text-[14px] text-ink-soft transition-all duration-200 hover:bg-primary/5 hover:text-primary">SSA Tax Calculator</a></SheetClose>
                       <SheetClose asChild><a href="/emi-calculator" className="block rounded-md px-3 py-2.5 text-[14px] text-ink-soft transition-all duration-200 hover:bg-primary/5 hover:text-primary">EMI Calculator</a></SheetClose>
-                      <SheetClose asChild><a href="/tax-calculator" className="block rounded-md px-3 py-2.5 text-[14px] text-ink-soft transition-all duration-200 hover:bg-primary/5 hover:text-primary">SSF Salary Break Up</a></SheetClose>
-                      <SheetClose asChild><a href="/know-yourself" className="block rounded-md px-3 py-2.5 text-[14px] text-ink-soft transition-all duration-200 hover:bg-primary/5 hover:text-primary">Finstate · Financial Analysis</a></SheetClose>
+                      <SheetClose asChild><a href="/tax-calculator" className="block rounded-md px-3 py-2.5 text-[14px] text-ink-soft transition-all duration-200 hover:bg-primary/5 hover:text-primary">SSF Salary Break Up and Tax Calculator</a></SheetClose>
                     </div>
                   </nav>
                   <div className="border-t border-primary/10 px-5 py-4">
