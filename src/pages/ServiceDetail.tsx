@@ -46,8 +46,8 @@ const ServiceDetail = () => {
             <h2 className="text-2xl font-bold text-summit">Key deliverables</h2>
             <div className="mt-5 grid gap-3 sm:grid-cols-2">
               {service.deliverables.map((deliverable) => (
-                deliverable === "Custom app development" ? (
-                  <Link key={deliverable} to="/custom-app-development" className="flex items-center gap-3 font-bold text-ink-soft hover:text-primary transition-colors group">
+                (deliverable === "Custom app development" || deliverable === "Workflow automation") ? (
+                  <Link key={deliverable} to={deliverable === "Custom app development" ? "/custom-app-development" : "/workflow-automation"} className="flex items-center gap-3 font-bold text-ink-soft hover:text-primary transition-colors group">
                     <CheckCircle2 className="h-5 w-5 shrink-0 text-ridge" /> {deliverable}
                     <ArrowRight className="h-4 w-4 opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0" />
                   </Link>
