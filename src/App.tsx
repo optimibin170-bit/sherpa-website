@@ -13,6 +13,7 @@ import EmiCalculator from "./pages/EmiCalculator.tsx";
 import CustomAppDevelopment from "./pages/CustomAppDevelopment.tsx";
 import WorkflowAutomation from "./pages/WorkflowAutomation.tsx";
 import WebsitePortalSystems from "./pages/WebsitePortalSystems.tsx";
+import InstitutionalMemoryPlaybook from "./pages/InstitutionalMemoryPlaybook.tsx";
 import KnowYourselfLanding from "./pages/know-yourself/KnowYourselfLanding";
 import COAPage from "./pages/know-yourself/COAPage";
 import TrialBalancePage from "./pages/know-yourself/TrialBalancePage";
@@ -49,6 +50,7 @@ const App = () => (
           <Route path="/custom-app-development" element={<CustomAppDevelopment />} />
           <Route path="/workflow-automation" element={<WorkflowAutomation />} />
           <Route path="/website-portal-systems" element={<WebsitePortalSystems />} />
+          <Route path="/institutional-memory-playbook" element={<InstitutionalMemoryPlaybook />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
