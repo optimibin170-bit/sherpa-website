@@ -44,7 +44,7 @@ const ResourceDetail = () => {
                       : section === "Finstate · Financial Analysis"
                         ? "/know-yourself"
                         : section === "Founder notes on scaling support teams"
-                          ? "/founder-notes-scaling-support-teams.md"
+                          ? "/founder-notes-scaling-support-teams.md.pdf"
                           : undefined;
                 return href ? (
                   href.endsWith(".md") ? (
