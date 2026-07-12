@@ -41,7 +41,7 @@ const ResourceDetail = () => {
                     ? "/emi-calculator"
                     : section === "SSF Salary Break Up and Tax Calculator"
                       ? "/tax-calculator"
-                      : section === "Finance close and reporting templates"
+                      : section === "Finstate · Financial Analysis"
                         ? "/know-yourself"
                         : undefined;
                 return href ? (

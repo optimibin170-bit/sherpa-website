@@ -181,7 +181,7 @@ const Index = () => {
                 <a href="/tax-calculator" className="block rounded-md px-3 py-2.5 text-[13.5px] text-ink-soft transition-all duration-200 hover:bg-primary/5 hover:text-primary">SSA Tax Calculator</a>
                 <a href="/emi-calculator" className="block rounded-md px-3 py-2.5 text-[13.5px] text-ink-soft transition-all duration-200 hover:bg-primary/5 hover:text-primary">EMI Calculator</a>
                 <a href="/tax-calculator" className="block rounded-md px-3 py-2.5 text-[13.5px] text-ink-soft transition-all duration-200 hover:bg-primary/5 hover:text-primary">SSF Salary Break Up</a>
-                <a href="/know-yourself" className="block rounded-md px-3 py-2.5 text-[13.5px] text-ink-soft transition-all duration-200 hover:bg-primary/5 hover:text-primary">Finance close and reporting templates</a>
+                <a href="/know-yourself" className="block rounded-md px-3 py-2.5 text-[13.5px] text-ink-soft transition-all duration-200 hover:bg-primary/5 hover:text-primary">Finstate · Financial Analysis</a>
               </div>
             </div>
           </div>
@@ -222,7 +222,7 @@ const Index = () => {
                       <SheetClose asChild><a href="/tax-calculator" className="block rounded-md px-3 py-2.5 text-[14px] text-ink-soft transition-all duration-200 hover:bg-primary/5 hover:text-primary">SSA Tax Calculator</a></SheetClose>
                       <SheetClose asChild><a href="/emi-calculator" className="block rounded-md px-3 py-2.5 text-[14px] text-ink-soft transition-all duration-200 hover:bg-primary/5 hover:text-primary">EMI Calculator</a></SheetClose>
                       <SheetClose asChild><a href="/tax-calculator" className="block rounded-md px-3 py-2.5 text-[14px] text-ink-soft transition-all duration-200 hover:bg-primary/5 hover:text-primary">SSF Salary Break Up</a></SheetClose>
-                      <SheetClose asChild><a href="/know-yourself" className="block rounded-md px-3 py-2.5 text-[14px] text-ink-soft transition-all duration-200 hover:bg-primary/5 hover:text-primary">Finance close and reporting templates</a></SheetClose>
+                      <SheetClose asChild><a href="/know-yourself" className="block rounded-md px-3 py-2.5 text-[14px] text-ink-soft transition-all duration-200 hover:bg-primary/5 hover:text-primary">Finstate · Financial Analysis</a></SheetClose>
                     </div>
                   </nav>
                   <div className="border-t border-primary/10 px-5 py-4">
