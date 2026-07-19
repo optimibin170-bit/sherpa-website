@@ -114,7 +114,7 @@ const team = [
     initials: "PB",
     color: "#dbeafe",
     textColor: "#1e40af",
-    role: "AI Engineer",
+    role: "Technology Stack",
     tags: ["Software Architecture", "Automation", "System Integration"],
     bio: "Designs and builds tailored software solutions for operational efficiency.",
   },
